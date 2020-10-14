@@ -3,7 +3,8 @@ const db = require("../models/User");
 const { check, validationResult } = require("express-validator/check");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const SECRET = "secret";
+//const SECRET = "secret";
+require("dotenv").config();
 
 const getsuperAdmin = async (req, res) => {
   try {
@@ -67,7 +68,7 @@ const postsuperAdmin =
             id: user.id,
           },
         };
-        jwt.sign(payload, SECRET, (err, token) => {
+        jwt.sign(payload, process.env.SECRET_KEY, (err, token) => {
           if (err) throw err;
           res.json({ token });
         });
@@ -125,7 +126,7 @@ const postAdmin =
             id: user.id,
           },
         };
-        jwt.sign(payload, SECRET, (err, token) => {
+        jwt.sign(payload, process.env.SECRET_KEY, (err, token) => {
           if (err) throw err;
           res.json({ token });
         });

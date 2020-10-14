@@ -3,7 +3,8 @@ const { check, validationResult } = require("express-validator/check");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const db = require("../models/User");
-const SECRET = "secret";
+//const SECRET = "secret";
+require("dotenv").config();
 
 const getUserToken =
   ([
@@ -38,7 +39,7 @@ const getUserToken =
         const role = user.role;
         const id = user.id;
         const name = user.name;
-        jwt.sign({ role, id, name }, SECRET, (err, token) => {
+        jwt.sign({ role, id, name }, process.env.SECRET_KEY, (err, token) => {
           if (err) throw err;
           res.json({ token, role, id, name });
         });
