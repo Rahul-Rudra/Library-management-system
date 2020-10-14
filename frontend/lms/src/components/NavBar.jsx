@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import { FaUserCircle } from "react-icons/fa";
+
 export default function NavBar() {
   const name = localStorage.getItem("name");
   return (
@@ -132,6 +133,17 @@ export default function NavBar() {
               ""
             )}
           </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <input
+              class="form-control mr-sm-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+              Search
+            </button>
+          </form>
           <ul className="nav navbar-nav navbar-right">
             <li className="nav-item ml-5 ">
               <a
