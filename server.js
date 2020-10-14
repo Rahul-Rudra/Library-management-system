@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 var cors = require("cors");
 const app = express();
 app.use(cors());
-
+require("dotenv").config();
 const port = process.env.PORT || 7500;
 mongoose.set("useCreateIndex", true);
-mongoose.connect("mongodb://localhost:27017/Notebokk", {
+mongoose.connect(process.env.mongo, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
