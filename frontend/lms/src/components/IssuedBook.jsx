@@ -20,7 +20,7 @@ class IssuedBook extends Component {
   };
   componentDidMount() {
     axios
-      .get("http://localhost:7500/api/issued/books")
+      .get("/api/issued/books")
       .then((response) => {
         //this.state.movie = response.data;
         this.setState({ Issue: response.data });

@@ -27,7 +27,7 @@ export default class Login extends Component {
     };
 
     axios
-      .post("http://localhost:7500/forget-password", userObject)
+      .post("/forget-password", userObject)
       .then((res) => {
         console.log(res.data.msg);
         alert(res.data.msg);

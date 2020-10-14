@@ -11,18 +11,19 @@ class Profile extends Component {
     return (
       <Fragment>
         <NavBar />
-        <div class="card border-success mb-3" style={{ width: "18rem" }}>
-          <div class="card-body text-success">
-            <h5 class="card-title">User-Profile</h5>
-            <p class="card-text">
-              Name : <span style={{ color: "red" }}>{name}</span>
-            </p>
-            <p>
-              Id : <span style={{ color: "red" }}>{id}</span>
-            </p>
-            <p>
-              Role : <span style={{ color: "red" }}>{role}</span>
-            </p>
+
+        <div className="card bg-light mb-3" style={{ width: 300 }}>
+          <img className="card-img-top " src="p.png" alt="Card image" />
+          <div className="card-body text">
+            <h4 className="card-text">
+              Name : <span style={{ color: "black" }}>{name}</span>
+            </h4>
+            <h4>
+              Id : <span style={{ color: "black" }}>{id}</span>
+            </h4>
+            <h4>
+              Role : <span style={{ color: "black" }}>{role}</span>
+            </h4>
           </div>
         </div>
       </Fragment>

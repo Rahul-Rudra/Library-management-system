@@ -79,7 +79,7 @@ const issueBook = async (req, res) => {
 const returnBook = async (req, res, next) => {
   try {
     const book_id = req.params.book_id;
-    // console.log(book_id);
+    console.log(book_id);
     // const name=req.user.name
     const user = await User.findById(req.params.id);
     const pos = user.bookIssueInfo.indexOf(req.params.book_id);
@@ -95,11 +95,13 @@ const returnBook = async (req, res, next) => {
 
     console.log(issue.book_info.id);
     const c = issue.book_info.id;
-    //console.log(c != book_id);
+    console.log(c != book_id);
     if (issue === null || c != book_id) {
       return res.json({
         msg: "Not issued by you first issue then return",
         issue,
+        c,
+        book_id,
       });
     }
     await issue.remove();

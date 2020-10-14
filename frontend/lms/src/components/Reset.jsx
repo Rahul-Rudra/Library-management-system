@@ -52,7 +52,7 @@ export default class Reset extends Component {
     // const data = { email: this.state.email, };
     // console.log(data)
     axios
-      .post("http://localhost:7500/forget-password/updatePassword", this.state)
+      .post("/forget-password/updatePassword", this.state)
       .then((result) => {
         alert(result.data.msg);
         console.log(result.data.msg);

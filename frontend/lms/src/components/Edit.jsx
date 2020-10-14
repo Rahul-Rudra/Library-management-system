@@ -53,7 +53,7 @@ export default class Edit extends Component {
     const id = this.props.match.params.id;
     console.log(id);
     axios
-      .put(`http://localhost:7500/api/users/${id}`, userObject)
+      .put(`/api/users/${id}`, userObject)
       .then((res) => {
         //  console.log(res.data);
         return this.props.history.push("/users");

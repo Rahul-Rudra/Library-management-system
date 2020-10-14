@@ -1,5 +1,6 @@
 const db = require("../models/Book");
 const { check, validationResult } = require("express-validator/check");
+const Book = require("../models/Book");
 
 const getBook = async (req, res) => {
   try {
@@ -14,7 +15,12 @@ const getSortedBook = (req, res) => {
   res.json(res.paginatedResults);
   //res.json(result);
 };
-
+const getsearchBook = (req, res) => {
+  const searchField = req.query.title;
+  Book.find({ title: { $regex: searchField, $options: "$i" } }).then((data) => {
+    res.json(data);
+  });
+};
 const postBook =
   ([
     check("title", "please include name").isString().not().isEmpty(),
@@ -52,4 +58,5 @@ module.exports = {
   postBook,
   getSortedBook,
   deleteBook,
+  getsearchBook,
 };

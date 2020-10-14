@@ -20,7 +20,7 @@ class UserList extends Component {
   };
   componentDidMount() {
     axios
-      .get("http://localhost:7500/api/users")
+      .get("/api/users")
       .then((response) => {
         //this.state.movie = response.data;
         this.setState({ user: response.data });
@@ -32,7 +32,7 @@ class UserList extends Component {
       });
   }
   deleteUser = (id) => {
-    axios.delete(`http://localhost:7500/api/users/${id}`).then((res) => {
+    axios.delete(`/api/users/${id}`).then((res) => {
       const users = this.state.user.filter((c) => c._id !== id);
       this.setState({ user: users });
     });

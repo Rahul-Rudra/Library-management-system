@@ -64,7 +64,7 @@ export default class Issue extends Component {
     };
 
     axios
-      .post("http://localhost:7500/book/:book_id/issue/:user_id", userObject)
+      .post("/book/:book_id/issue/:user_id", userObject)
       .then((res) => {
         console.log(res.data);
         return this.props.history.push("/login");

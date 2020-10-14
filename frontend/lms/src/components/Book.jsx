@@ -25,7 +25,7 @@ class Book extends Component {
   };
   componentDidMount() {
     axios
-      .get("http://localhost:7500/api/books")
+      .get("/api/books")
       .then((response) => {
         //this.state.movie = response.data;
         this.setState({ book: response.data });
@@ -64,7 +64,7 @@ class Book extends Component {
 
     //console.log(user_id);
     axios
-      .post(`http://localhost:7500/api/book/${book_id}/issue/${user_id}`)
+      .post(`/api/book/${book_id}/issue/${user_id}`)
       .then((res) => {
         //const users = this.state.user.filter((c) => c._id !== book_id);
         console.log(res.data);
@@ -89,13 +89,13 @@ class Book extends Component {
 
     //console.log(user_id);
     axios
-      .post(`http://localhost:7500/api/return/book_id/${book_id}/user_id/${id}`)
+      .post(`/api/return/book_id/${book_id}/user_id/${id}`)
       .then((res) => {
         //const users = this.state.user.filter((c) => c._id !== book_id);
-        console.log(res.data);
+        console.log(res.data.c);
         this.setState({ Issue: res.data });
         this.state.bool = false;
-        res.data.issue === null
+        res.data.issue === null || res.data.c != res.data.book_id
           ? toast.error(
               "You can not return this book first issue the book then only you can return"
             )
@@ -113,7 +113,7 @@ class Book extends Component {
 
     //console.log(user_id);
     axios
-      .post(`http://localhost:7500/api/renew/book_id/${id}/user_id/${user_id}`)
+      .post(`/api/renew/book_id/${id}/user_id/${user_id}`)
       .then((res) => {
         //const users = this.state.user.filter((c) => c._id !== book_id);
         console.log(res.data);

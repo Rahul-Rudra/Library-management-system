@@ -50,7 +50,7 @@ export default class Register extends Component {
     };
 
     axios
-      .post("http://localhost:7500/api/books", userObject)
+      .post("/api/books", userObject)
       .then((res) => {
         console.log(res.data);
         return this.props.history.push("/books");

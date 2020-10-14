@@ -20,7 +20,7 @@ class Activity extends Component {
   };
   componentDidMount() {
     axios
-      .get("http://localhost:7500/api/activitys")
+      .get("/api/activitys")
       .then((response) => {
         //this.state.movie = response.data;
         this.setState({ activity: response.data });

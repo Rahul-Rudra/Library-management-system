@@ -11,8 +11,11 @@ const {
   postBook,
   getSortedBook,
   deleteBook,
+  getsearchBook,
 } = require("../controllers/book");
 const router = express.Router();
+
+router.get("/searchbyname", getsearchBook);
 
 router.get("/", getBook);
 

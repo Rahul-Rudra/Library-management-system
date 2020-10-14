@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-
+import { FaUserCircle } from "react-icons/fa";
 export default function NavBar() {
   const name = localStorage.getItem("name");
   return (
@@ -131,6 +131,27 @@ export default function NavBar() {
             ) : (
               ""
             )}
+          </ul>
+          <ul className="nav navbar-nav navbar-right">
+            <li className="nav-item ml-5 ">
+              <a
+                className="nav-link active"
+                href="/profile"
+                tabIndex="-1"
+                aria-disabled="false"
+              >
+                <span
+                  style={{
+                    color: "#deee78",
+                    margin: "5px",
+                    textAlign: "center",
+                  }}
+                >
+                  {name}
+                </span>
+                <FaUserCircle />
+              </a>
+            </li>
             {localStorage.getItem("login") ? (
               <li className="nav-item">
                 <a
@@ -154,7 +175,6 @@ export default function NavBar() {
                 </a>
               </li>
             )}
-
             {localStorage.getItem("login") ? (
               " "
             ) : (
@@ -165,21 +185,10 @@ export default function NavBar() {
                   tabIndex="-1"
                   aria-disabled="true"
                 >
-                  Register
+                  SingUp
                 </a>
               </li>
             )}
-
-            <li className="nav-item ml-5">
-              <a
-                className="nav-link active"
-                href="#"
-                tabIndex="-1"
-                aria-disabled="false"
-              >
-                {name}
-              </a>
-            </li>
           </ul>
         </div>
       </nav>

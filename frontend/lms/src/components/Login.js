@@ -40,7 +40,7 @@ export default class Login extends Component {
     };
 
     axios
-      .post("http://localhost:7500/api/auth", userObject)
+      .post("/api/auth", userObject)
       .then((res) => {
         //console.log(res.data.id);
         localStorage.setItem("login", JSON.stringify(res));

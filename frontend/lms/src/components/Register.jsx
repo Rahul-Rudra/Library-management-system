@@ -52,7 +52,7 @@ export default class Register extends Component {
     };
 
     axios
-      .post("http://localhost:7500/api/users", userObject)
+      .post("/api/users", userObject)
       .then((res) => {
         console.log(res.data);
         //alert(res.data.msg);
