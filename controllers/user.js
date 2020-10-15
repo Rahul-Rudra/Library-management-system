@@ -22,7 +22,7 @@ const getSortedUser = (req, res) => {
 
 const postUser =
   ([
-    check("name", "please include name").not().isEmpty(),
+    check("name", "please include name").not().isEmpty().isLength({ min: 3 }),
     check("email", "please mention a valid email").isEmail(),
     check(
       "password",
@@ -85,7 +85,7 @@ const deleteUser = async (req, res) => {
 
 const editUser =
   ([
-    check("name", "please include name").not().isEmpty(),
+    check("name", "please include name").not().isEmpty().isLength({ min: 3 }),
     check("email", "please mention a valid email").isEmail(),
     check(
       "password",

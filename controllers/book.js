@@ -27,7 +27,7 @@ const postBook =
       .isString()
       .not()
       .isEmpty()
-      .isLength({ min: 10 }),
+      .isLength({ max: 10 }),
 
     check("ISBN", "please mention a ISBN").isString(),
     check("stock").isNumeric(),
