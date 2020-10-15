@@ -53,10 +53,15 @@ export default class Register extends Component {
       .post("/api/books", userObject)
       .then((res) => {
         console.log(res.data);
+        if (res.data.title === null) {
+          alert("name is required and length must be more than 3");
+        }
+
         return this.props.history.push("/books");
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
+        alert(error);
       });
 
     this.setState({ title: "", ISBN: "", stock: "", author: "" });

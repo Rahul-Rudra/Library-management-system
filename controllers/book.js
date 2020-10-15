@@ -1,5 +1,5 @@
 const db = require("../models/Book");
-const { check, validationResult } = require("express-validator/check");
+const { body, validationResult } = require("express-validator");
 const Book = require("../models/Book");
 
 const getBook = async (req, res) => {
@@ -23,15 +23,10 @@ const getsearchBook = (req, res) => {
 };
 const postBook =
   ([
-    check("title", "please include name")
-      .isString()
-      .not()
-      .isEmpty()
-      .isLength({ max: 10 }),
-
-    check("ISBN", "please mention a ISBN").isString(),
-    check("stock").isNumeric(),
-    check("author").isString(),
+    body("title").isString().isLength({ max: 10 }).notEmpty(),
+    body("ISBN").isString().isLength({ min: 6 }),
+    body("stock").isNumeric(),
+    body("author").isString(),
   ],
   async (req, res) => {
     const errors = validationResult(req);

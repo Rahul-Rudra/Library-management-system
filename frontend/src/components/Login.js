@@ -57,7 +57,7 @@ export default class Login extends Component {
       })
       .catch((error) => {
         console.log(error.msg);
-        alert(error);
+        alert(error.errors);
       });
 
     this.setState({ email: "", password: "" });

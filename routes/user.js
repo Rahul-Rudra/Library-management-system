@@ -25,12 +25,34 @@ const router = express.Router();
 router.get("/", getUser);
 
 router.delete("/:id", deleteUser);
-router.post("/", postUser);
+router.post(
+  "/",
+  [
+    check("name", "please include name").not().isEmpty().isLength({ min: 3 }),
+    check("email", "please mention a valid email").isEmail(),
+    check(
+      "password",
+      "please enter a password with 6 or more characters"
+    ).isLength({ min: 6 }),
+  ],
+  postUser
+);
 router.post("/superadmins", postsuperAdmin);
 router.get("/superadmins", getsuperAdmin);
 router.post("/admins", postAdmin);
 router.get("/admins", getAdmin);
-router.put("/:id", editUser);
+router.put(
+  "/:id",
+  [
+    check("name", "please include name").not().isEmpty().isLength({ min: 3 }),
+    check("email", "please mention a valid email").isEmail(),
+    check(
+      "password",
+      "please enter a password with 6 or more characters"
+    ).isLength({ min: 6 }),
+  ],
+  editUser
+);
 router.get("/filters", paginatedResults(db), getSortedUser);
 
 module.exports = router;
