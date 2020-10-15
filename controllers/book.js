@@ -23,7 +23,11 @@ const getsearchBook = (req, res) => {
 };
 const postBook =
   ([
-    check("title", "please include name").isString().not().isEmpty(),
+    check("title", "please include name")
+      .isString()
+      .not()
+      .isEmpty()
+      .isLength({ min: 10 }),
 
     check("ISBN", "please mention a ISBN").isString(),
     check("stock").isNumeric(),
