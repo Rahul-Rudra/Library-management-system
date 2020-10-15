@@ -17,7 +17,7 @@ app.use("/api/", require("./routes/issue"));
 app.use("/api/activitys/", require("./routes/activity"));
 app.use("/forget-password", require("./routes/forget"));
 //app.use("/", require("./routes/resetforget"));
-
+//"test": "echo \"Error: no test specified\" && exit 1",
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("frontend/build"));
   app.get("*", (req, res) => {
