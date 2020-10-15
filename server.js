@@ -4,7 +4,7 @@ var cors = require("cors");
 const app = express();
 app.use(cors());
 require("dotenv").config();
-const mongoUrl = require("./connection/db");
+//const mongoUrl = require("./connection/db");
 const port = process.env.PORT || 7500;
 mongoose.set("useCreateIndex", true);
 const connectDB = require("./connection/db");
