@@ -4,12 +4,11 @@ var cors = require("cors");
 const app = express();
 app.use(cors());
 require("dotenv").config();
+const mongoUrl = require("./connection/db");
 const port = process.env.PORT || 7500;
 mongoose.set("useCreateIndex", true);
-mongoose.connect(process.env.mongo, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const connectDB = require("./connection/db");
+connectDB();
 app.use(express.json({ extended: false }));
 app.use("/api/users/", require("./routes/user"));
 app.use("/api/auth/", require("./routes/auth"));
@@ -18,6 +17,11 @@ app.use("/api/", require("./routes/issue"));
 app.use("/api/activitys/", require("./routes/activity"));
 app.use("/forget-password", require("./routes/forget"));
 //app.use("/", require("./routes/resetforget"));
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("frontend/build"));
+}
+
 app.listen(port, (req, res) => {
   console.log("Running");
 });
