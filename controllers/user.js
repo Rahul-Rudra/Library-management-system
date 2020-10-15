@@ -112,7 +112,7 @@ const editUser =
       // user.set(req.body);
       await user.save();
 
-      res.json({ msg: "Successfully register" }, user);
+      res.json({ msg: "Successfully updated" });
     } catch (error) {
       res.status(500).send("server error");
     }

@@ -51,11 +51,11 @@ export default class Edit extends Component {
       role: this.state.role,
     };
     const id = this.props.match.params.id;
-    console.log(id);
+    //console.log(id);
     axios
       .put(`/api/users/${id}`, userObject)
       .then((res) => {
-        //  console.log(res.data);
+        // console.log(res.data);
         return this.props.history.push("/users");
       })
       .catch((error) => {
