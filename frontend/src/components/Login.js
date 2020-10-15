@@ -89,7 +89,7 @@ export default class Login extends Component {
                 autoFocus
                 autoComplete
                 required
-                type="text"
+                type="password"
                 id="password"
                 placeholder="Password"
                 value={this.state.password}
