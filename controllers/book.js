@@ -21,31 +21,24 @@ const getsearchBook = (req, res) => {
     res.json(data);
   });
 };
-const postBook =
-  ([
-    body("title").isString().isLength({ max: 10 }).notEmpty(),
-    body("ISBN").isString().isLength({ min: 6 }),
-    body("stock").isNumeric(),
-    body("author").isString(),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    try {
-      const book = new db({
-        title: req.body.title,
-        ISBN: req.body.ISBN,
-        stock: req.body.stock,
-        author: req.body.author,
-      });
-      await book.save();
-      res.json(book);
-    } catch (error) {
-      res.status(500).json("server error");
-    }
-  });
+const postBook = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  try {
+    const book = new db({
+      title: req.body.title,
+      ISBN: req.body.ISBN,
+      stock: req.body.stock,
+      author: req.body.author,
+    });
+    await book.save();
+    res.json(book);
+  } catch (error) {
+    res.status(500).json("server error");
+  }
+};
 
 const deleteBook = async (req, res) => {
   const result = await db.findByIdAndRemove(req.params.id);

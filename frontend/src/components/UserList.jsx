@@ -13,7 +13,7 @@ class UserList extends Component {
   state = {
     user: [],
     currentPage: 1,
-    pageSize: 5,
+    pageSize: 4,
     count: 0,
     //checked: false,
     // isEnable: true,

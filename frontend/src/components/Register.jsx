@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import NavBar from "../components/NavBar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { indexOf } from "lodash";
 
 export default class Register extends Component {
   constructor(props) {
@@ -24,19 +25,40 @@ export default class Register extends Component {
       password: "",
       role: "user",
       //error: [],
+      errors: {
+        name: "",
+        email: "",
+        password: "",
+      },
     };
   }
 
   onChangeUser(e) {
+    let value = e.target.value;
+    let errors = this.state.errors;
+    errors.name = value.length < 3 ? "name must contain 3 character" : "";
     this.setState({ name: e.target.value });
   }
 
   onChangeEmail(e) {
+    let value = e.target.value;
+    let errors = this.state.errors;
+    errors.email = value.length < 3 ? "email must contain 3 character" : "";
+    let apos = value.indexOf("@");
+    let dotpos = value.lastIndexOf(".");
+    if (apos < 1 || dotpos - apos < 2) {
+      errors.email = "please enter a valid email id";
+    }
     this.setState({ email: e.target.value });
   }
   onChangePassword(e) {
+    let value = e.target.value;
+    let errors = this.state.errors;
+    errors.password =
+      value.length < 6 ? "password must contain atleast  6 character" : "";
     this.setState({ password: e.target.value });
   }
+
   handleChange(event) {
     this.setState({ role: event.target.value });
   }
@@ -68,6 +90,7 @@ export default class Register extends Component {
   }
 
   render() {
+    const { errors } = this.state;
     return (
       <React.Fragment>
         <ToastContainer />
@@ -85,6 +108,9 @@ export default class Register extends Component {
                 onChange={this.onChangeUser}
                 className="form-control"
               />
+              <p>
+                <span style={{ color: "Pink" }}>{errors.name}</span>
+              </p>
             </div>
             <div className="form-group m-3">
               <label forhtml="email">Email</label>
@@ -97,6 +123,9 @@ export default class Register extends Component {
                 onChange={this.onChangeEmail}
                 className="form-control"
               />
+              <p>
+                <span style={{ color: "Pink" }}>{errors.email}</span>
+              </p>
             </div>
             <div className="form-group m-3 ">
               <label forhtml="password">Password</label>
@@ -109,6 +138,9 @@ export default class Register extends Component {
                 onChange={this.onChangePassword}
                 className="form-control"
               />
+              <p>
+                <span style={{ color: "Pink" }}>{errors.password}</span>
+              </p>
             </div>
             <div className="form-group m-3">
               <label forhtml="exampleFormControlSelect">Role</label>

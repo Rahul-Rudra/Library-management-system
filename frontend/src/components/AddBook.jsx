@@ -22,20 +22,43 @@ export default class Register extends Component {
       ISBN: "",
       stock: "",
       author: "",
+      errors: {
+        title: "",
+        ISBN: "",
+        stock: "",
+        author: "",
+      },
     };
   }
 
   onChangeTitle(e) {
+    let value = e.target.value;
+    let errors = this.state.errors;
+    errors.title =
+      value.length < 3
+        ? "Title must contain between 3 to 10 character shoul be string "
+        : "";
     this.setState({ title: e.target.value });
   }
 
   onChangeISBN(e) {
+    let value = e.target.value;
+    let errors = this.state.errors;
+    errors.ISBN =
+      value.length < 3 ? "name must contain atleast 6 character" : "";
     this.setState({ ISBN: e.target.value });
   }
   onChangeStock(e) {
+    let value = e.target.value;
+    let errors = this.state.errors;
+    errors.stock =
+      value.length < 3 ? "name must be a Integer and greater than 0" : "";
     this.setState({ stock: e.target.value });
   }
   onChangeAuthor(event) {
+    let value = event.target.value;
+    let errors = this.state.errors;
+    errors.author = value.length < 3 ? "name must contain 3 character" : "";
     this.setState({ author: event.target.value });
   }
 
@@ -51,9 +74,9 @@ export default class Register extends Component {
 
     axios
       .post("/api/books", userObject)
-      .then((res) => {
+      .then((res, err) => {
         console.log(res.data);
-        if (res.data.title === null) {
+        if (err) {
           alert("name is required and length must be more than 3");
         }
 
@@ -68,6 +91,7 @@ export default class Register extends Component {
   }
 
   render() {
+    const { errors } = this.state;
     return (
       <React.Fragment>
         <NavBar />
@@ -84,6 +108,9 @@ export default class Register extends Component {
                 onChange={this.onChangeTitle}
                 className="form-control"
               />
+              <p>
+                <span style={{ color: "Pink" }}>{errors.title}</span>
+              </p>
             </div>
             <div className="form-group m-3">
               <label forhtml="ISBN">ISBN</label>
@@ -96,6 +123,9 @@ export default class Register extends Component {
                 onChange={this.onChangeISBN}
                 className="form-control"
               />
+              <p>
+                <span style={{ color: "Pink" }}>{errors.ISBN}</span>
+              </p>
             </div>
             <div className="form-group m-3 ">
               <label forhtml="stock">Stock</label>
@@ -108,6 +138,9 @@ export default class Register extends Component {
                 onChange={this.onChangeStock}
                 className="form-control"
               />
+              <p>
+                <span style={{ color: "Pink" }}>{errors.stock}</span>
+              </p>
             </div>
             <div className="form-group m-3">
               <label forhtml="author">Author</label>
@@ -120,6 +153,9 @@ export default class Register extends Component {
                 onChange={this.onChangeAuthor}
                 className="form-control"
               />
+              <p>
+                <span style={{ color: "Pink" }}>{errors.author}</span>
+              </p>
             </div>
             <div className="form-group m-3">
               <input

@@ -20,14 +20,30 @@ export default class Login extends Component {
     this.state = {
       email: "",
       password: "",
+      errors: {
+        email: "",
+        password: "",
+      },
     };
   }
 
   onChangeEmail(e) {
+    let value = e.target.value;
+    let errors = this.state.errors;
+    errors.email = value.length < 3 ? "email must contain 3 character" : "";
+    let apos = value.indexOf("@");
+    let dotpos = value.lastIndexOf(".");
+    if (apos < 1 || dotpos - apos < 2) {
+      errors.email = "please enter a valid email id";
+    }
     this.setState({ email: e.target.value });
   }
 
   onChangePassword(e) {
+    let value = e.target.value;
+    let errors = this.state.errors;
+    errors.password =
+      value.length < 6 ? "password must contain atleast  6 character" : "";
     this.setState({ password: e.target.value });
   }
 
@@ -64,6 +80,7 @@ export default class Login extends Component {
   }
 
   render() {
+    const { errors } = this.state;
     return (
       <React.Fragment>
         <NavBar />
@@ -82,6 +99,9 @@ export default class Login extends Component {
                 onChange={this.onChangeEmail}
                 className="form-control"
               />
+              <p>
+                <span style={{ color: "Pink" }}>{errors.email}</span>
+              </p>
             </div>
             <div className="form-group m-3 ">
               <label forhtml="password">Password</label>
@@ -96,6 +116,9 @@ export default class Login extends Component {
                 onChange={this.onChangePassword}
                 className="form-control"
               />
+              <p>
+                <span style={{ color: "Pink" }}>{errors.password}</span>
+              </p>
             </div>
             <div className="form-group m-3">
               <input type="submit" value="Login" className="btn btn-success" />

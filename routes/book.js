@@ -23,12 +23,13 @@ router.get("/", getBook);
 router.post(
   "/",
   [
-    body("title", "Title not more than 10")
+    body("title", "Title length between 3 to 10")
       .isString()
+      .isLength({ min: 3 })
       .isLength({ max: 10 })
       .notEmpty(),
     body("ISBN").isString().isLength({ min: 6 }),
-    body("stock").isNumeric(),
+    body("stock").isInt({ gt: -1 }),
     body("author").isString(),
   ],
   postBook
