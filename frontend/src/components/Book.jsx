@@ -28,7 +28,7 @@ class Book extends Component {
       .get("/api/books")
       .then((response) => {
         //this.state.movie = response.data;
-        this.setState({ book: response.data });
+        this.setState({ book: [...response.data] });
         console.log(book);
         //console.log(response.data);
       })
@@ -36,6 +36,7 @@ class Book extends Component {
         console.log(error);
       });
   }
+
   /* issueBook = (id) => {
       const obj={
         name: this.state.name,
@@ -59,6 +60,7 @@ class Book extends Component {
     });
   };
 */
+
   IssueBook = (book_id) => {
     const user_id = localStorage.getItem("id");
 
@@ -68,7 +70,11 @@ class Book extends Component {
       .then((res) => {
         //const users = this.state.user.filter((c) => c._id !== book_id);
         console.log(res.data);
+        //return this.props.history.push("/books");
         this.setState({ Issue: res.data });
+        //this.setState({ book: res.data.book });
+        //this.setState({ activity: res.data.activity });
+        //this.setState({ user: res.data.user });
         this.state.bool = false;
 
         res.data.len === 5 || res.data.st === 0
@@ -76,6 +82,7 @@ class Book extends Component {
               "You can not access more than 5 books or stock is zero"
             )
           : toast.success("successfully issued by you");
+        return this.props.history.push("/books");
         //res.data.st === 0 ? toast("Stock is zero") : "";
       })
       .catch((error) => {
@@ -84,6 +91,7 @@ class Book extends Component {
         toast.error(msg);
       });
   };
+
   ReturnBook = (book_id) => {
     const id = localStorage.getItem("id");
 
@@ -94,12 +102,15 @@ class Book extends Component {
         //const users = this.state.user.filter((c) => c._id !== book_id);
         console.log(res.data.c);
         this.setState({ Issue: res.data });
+        //this.setState({ book: res.data.book });
         this.state.bool = false;
         res.data.issue === null || res.data.c != res.data.book_id
           ? toast.error(
               "You can not return this book first issue the book then only you can return"
             )
           : toast.success("successfully return by you");
+
+        return this.props.history.push("/books");
       })
       .catch((error) => {
         console.log(error);

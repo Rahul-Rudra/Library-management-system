@@ -88,8 +88,6 @@ const returnBook = async (req, res, next) => {
     //console.log(pos);
 
     const book = await Book.findById(book_id);
-    book.stock += 1;
-    await book.save();
 
     const issue = await db.findOne({ "user_id.id": req.params.id });
 
@@ -104,6 +102,9 @@ const returnBook = async (req, res, next) => {
         book_id,
       });
     }
+    book.stock += 1;
+    await book.save();
+
     await issue.remove();
 
     const result = user.bookIssueInfo.splice(pos, 1);
@@ -127,7 +128,7 @@ const returnBook = async (req, res, next) => {
       },
     });
     await activity.save();
-    res.json("successfull");
+    res.json(issue);
     next();
   } catch (err) {
     res.status(400).json({ msg: "you do not issued this book" });

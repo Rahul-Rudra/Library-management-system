@@ -45,20 +45,20 @@ export default class Register extends Component {
     let value = e.target.value;
     let errors = this.state.errors;
     errors.ISBN =
-      value.length < 3 ? "name must contain atleast 6 character" : "";
+      value.length < 3 ? "ISBN must contain atleast 6 character" : "";
     this.setState({ ISBN: e.target.value });
   }
   onChangeStock(e) {
     let value = e.target.value;
     let errors = this.state.errors;
     errors.stock =
-      value.length < 3 ? "name must be a Integer and greater than 0" : "";
+      value.length < 3 ? "stock must be a Integer and greater than 0" : "";
     this.setState({ stock: e.target.value });
   }
   onChangeAuthor(event) {
     let value = event.target.value;
     let errors = this.state.errors;
-    errors.author = value.length < 3 ? "name must contain 3 character" : "";
+    errors.author = value.length < 3 ? "author must contain 3 character" : "";
     this.setState({ author: event.target.value });
   }
 
