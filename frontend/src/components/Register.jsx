@@ -8,6 +8,10 @@ import NavBar from "../components/NavBar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { indexOf } from "lodash";
+import {
+  NotificationContainer,
+  NotificationManager,
+} from "react-notifications";
 
 export default class Register extends Component {
   constructor(props) {
@@ -76,14 +80,12 @@ export default class Register extends Component {
     axios
       .post("/api/users", userObject)
       .then((res) => {
-        console.log(res.data);
-        //alert(res.data.msg);
-        alert("Successfully Register");
+        toast.success("Successfully Register");
         return this.props.history.push("/login");
       })
       .catch((error) => {
         console.log(error);
-        alert("password must be atleast 6 character");
+        alert("user already exists or enter a valid value for each field");
       });
 
     this.setState({ name: "", email: "", password: "" });
@@ -93,6 +95,7 @@ export default class Register extends Component {
     const { errors } = this.state;
     return (
       <React.Fragment>
+        <NotificationContainer />
         <ToastContainer />
         <NavBar />
         <div className="wrapper m-5 ">

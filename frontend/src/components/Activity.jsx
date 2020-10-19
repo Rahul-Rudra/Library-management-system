@@ -13,7 +13,7 @@ class Activity extends Component {
   state = {
     activity: [],
     currentPage: 1,
-    pageSize: 5,
+    pageSize: 10,
     count: 0,
     //checked: false,
     // isEnable: true,
@@ -64,16 +64,15 @@ class Activity extends Component {
       <div className="App">
         <React.Fragment>
           <NavBar />
-          <table className="table table-bordered table-hover table-lg w-40 p-3 m-5">
+          <table className="table table-bordered table-hover table-lg w-40 p-2 m-2">
             <thead>
               <tr>
                 <th scope="col">Book_id</th>
                 <th>Book_Title</th>
-                <th>IssueDate</th>
-                <th>ReturnDate</th>
+
                 <th>UserName</th>
-                <th>User_id</th>
-                <th>Category</th>
+
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -82,9 +81,7 @@ class Activity extends Component {
                   <tr key={i}>
                     <td scope="row">{u.info.id}</td>
                     <td>{u.info.title}</td>
-                    <td>{u.time.issueDate}</td>
-                    <td>{u.time.returnDate}</td>
-                    <td>{u.user_id.id}</td>
+
                     <td>{u.user_id.name}</td>
                     <td>{u.category}</td>
                   </tr>

@@ -5,6 +5,7 @@ const Book = require("../models/Book");
 const getBook = async (req, res) => {
   try {
     const result = await db.find();
+    // console.log(result.stock);
     res.json(result);
   } catch (error) {
     res.status(500);

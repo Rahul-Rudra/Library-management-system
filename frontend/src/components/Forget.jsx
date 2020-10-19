@@ -3,6 +3,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import NavBar from "./NavBar";
+import { toast, ToastContainer } from "react-toastify";
 export default class Login extends Component {
   constructor(props) {
     super(props);
@@ -30,13 +31,13 @@ export default class Login extends Component {
       .post("/forget-password", userObject)
       .then((res) => {
         console.log(res.data.msg);
-        alert(res.data.msg);
+        toast.success(res.data);
         // localStorage.setItem("forget", JSON.stringify(res));
         //return this.props.history.push("/");
       })
       .catch((error) => {
         console.log(error);
-        alert(error);
+        alert("Email not exists or enter a correct email");
       });
 
     this.setState({ email: "" });
@@ -45,6 +46,7 @@ export default class Login extends Component {
   render() {
     return (
       <React.Fragment>
+        <ToastContainer />
         <NavBar />
         <div className="wrapper m-5 ">
           <form onSubmit={this.onSubmit}>

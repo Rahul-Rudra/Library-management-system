@@ -74,10 +74,13 @@ class IssuedBook extends Component {
             </thead>
             <tbody>
               {Issue.map((u, i) => {
+                const d = u.book_info.issueDate.split("T");
+
                 return (
                   <tr key={i}>
                     <td>{u.book_info.title}</td>
-                    <td>{u.book_info.issueDate}</td>
+
+                    <td>{d[0]}</td>
                     <td>{u.user_id.name}</td>
                   </tr>
                 );

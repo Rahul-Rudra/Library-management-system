@@ -66,14 +66,12 @@ export default class Login extends Component {
 
         //const a = localStorage.getItem("role");
         console.log(res.data.id);
-        //alert()
-        // console.log(a === "superAdmin");
-        //console.log(JSON.stringify(res.data.id));
         return this.props.history.push("/");
       })
       .catch((error) => {
         console.log(error.msg);
-        alert(error.errors);
+        toast.error("user not exists or username and password incorrect");
+        // alert(error.errors);
       });
 
     this.setState({ email: "", password: "" });
@@ -83,6 +81,7 @@ export default class Login extends Component {
     const { errors } = this.state;
     return (
       <React.Fragment>
+        <ToastContainer />
         <NavBar />
         <div className="wrapper m-5 ">
           <form onSubmit={this.onSubmit}>

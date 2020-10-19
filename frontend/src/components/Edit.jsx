@@ -20,6 +20,7 @@ export default class Edit extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     //const id: this.props.match.params.id,
     this.state = {
+      user: [],
       name: "",
       email: "",
       password: "",
@@ -41,6 +42,30 @@ export default class Edit extends Component {
     this.setState({ role: event.target.value });
   }
 
+  componentWillMount() {
+    this.getUserDetail();
+  }
+  getUserDetail = () => {
+    const id = this.props.match.params.id;
+    axios
+      .get(`/api/users/${id}`)
+      .then((res) => {
+        this.setState({
+          name: res.data.name,
+          email: res.data.email,
+          password: res.data.password,
+          role: res.data.role,
+        });
+        console.log(res.data);
+        //return this.props.history.push("/users");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // this.setState({ name: "", email: "", password: "" });
+  };
+
   onSubmit(e) {
     e.preventDefault();
 
@@ -50,21 +75,23 @@ export default class Edit extends Component {
       password: this.state.password,
       role: this.state.role,
     };
+    //this.editUserDetail(userObject);
+
     const id = this.props.match.params.id;
     //console.log(id);
     axios
       .put(`/api/users/${id}`, userObject)
       .then((res) => {
         // console.log(res.data);
+        alert("Successfully updated");
         return this.props.history.push("/users");
       })
       .catch((error) => {
         console.log(error);
       });
 
-    this.setState({ name: "", email: "", password: "" });
+    //this.setState({ name: "", email: "", password: "" });
   }
-
   render() {
     return (
       <React.Fragment>

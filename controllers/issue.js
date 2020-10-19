@@ -18,6 +18,11 @@ const issueBook = async (req, res) => {
   try {
     const book = await Book.findById(req.params.book_id);
     const user = await User.findById(req.params.user_id);
+    const pos = user.bookIssueInfo.indexOf(req.params.book_id);
+    console.log(pos);
+    if (pos > -1) {
+      return res.status(403).send("you can not take same book again");
+    }
     const st = book.stock;
     if (user.bookIssueInfo.length >= 5) {
       const len = user.bookIssueInfo.length;
@@ -47,6 +52,9 @@ const issueBook = async (req, res) => {
       });
 
       user.bookIssueInfo.push(book._id);
+      //  const d = issue.book_info.issueDate.split("T");
+      //const d1 = issue.book_info.returnDate.split("T");
+      //console.log(d[0]);
 
       const activity = new Activity({
         info: {
@@ -69,7 +77,7 @@ const issueBook = async (req, res) => {
       await issue.save();
       await activity.save();
       await book.save();
-      res.json(issue);
+      res.json({ issue: issue, user: user });
     }
   } catch (err) {
     res.json("error");
@@ -94,6 +102,7 @@ const returnBook = async (req, res, next) => {
     console.log(issue.book_info.id);
     const c = issue.book_info.id;
     console.log(c != book_id);
+    console.log(issue);
     if (issue === null || c != book_id) {
       return res.json({
         msg: "Not issued by you first issue then return",
@@ -149,12 +158,20 @@ const renewBook = async (req, res, next) => {
     //console.log(issue);
     //const c = issue.book_info.id;
     if (issue === null) {
-      return res.json({
+      return res.status(404).json({
         msg: "Not issued by you first issue then renew",
         issue,
       });
     }
-    console.log(issue);
+    const d = Date.now();
+    console.log(d > issue.book_info.returnDate);
+    if (d > issue.book_info.returnDate === false) {
+      return res.json({
+        msg: "You can renew after the completion of return date",
+      });
+    }
+
+    //console.log(issue);
 
     let time = issue.book_info.returnDate.getTime();
     issue.book_info.returnDate = time + 7 * 24 * 60 * 60 * 1000;

@@ -1,14 +1,15 @@
 import React, { Fragment } from "react";
 import { FaUserCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
   const name = localStorage.getItem("name");
   return (
     <Fragment>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a className="navbar-brand" href="#">
+        <Link className="navbar-brand" to="#">
           Navbar
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -24,21 +25,21 @@ export default function NavBar() {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
             <li className="nav-item ">
-              <a className="nav-link" href="/">
+              <Link className="nav-link" to="/">
                 Home <span className="sr-only">(current)</span>
-              </a>
+              </Link>
             </li>
             {localStorage.getItem("login") &&
             localStorage.getItem("role") === "superAdmin" ? (
               <li className="nav-item">
-                <a
+                <Link
                   className="nav-link"
-                  href="/users"
+                  to="/users"
                   tabIndex="-1"
                   aria-disabled="true"
                 >
                   UserList
-                </a>
+                </Link>
               </li>
             ) : (
               ""
@@ -46,14 +47,14 @@ export default function NavBar() {
             {localStorage.getItem("login") &&
             localStorage.getItem("role") === "superAdmin" ? (
               <li className="nav-item">
-                <a
+                <Link
                   className="nav-link"
-                  href="/activitys"
+                  to="/activitys"
                   tabIndex="-1"
                   aria-disabled="true"
                 >
                   Activity
-                </a>
+                </Link>
               </li>
             ) : (
               ""
@@ -61,28 +62,28 @@ export default function NavBar() {
             {localStorage.getItem("login") &&
             localStorage.getItem("role") === "Admin" ? (
               <li className="nav-item">
-                <a
+                <Link
                   className="nav-link"
-                  href="/activitys"
+                  to="/activitys"
                   tabIndex="-1"
                   aria-disabled="true"
                 >
                   Activity
-                </a>
+                </Link>
               </li>
             ) : (
               ""
             )}
             {localStorage.getItem("login") ? (
               <li className="nav-item">
-                <a
+                <Link
                   className="nav-link"
-                  href="/profile"
+                  to="/profile"
                   tabIndex="-1"
                   aria-disabled="true"
                 >
                   Profile
-                </a>
+                </Link>
               </li>
             ) : (
               ""
@@ -90,29 +91,44 @@ export default function NavBar() {
 
             {localStorage.getItem("login") ? (
               <li className="nav-item">
-                <a
+                <Link
                   className="nav-link"
-                  href="/books"
+                  to="/books"
                   tabIndex="-1"
                   aria-disabled="true"
                 >
                   Book
-                </a>
+                </Link>
               </li>
             ) : (
               ""
             )}
+            {localStorage.getItem("login") ? (
+              <li className="nav-item">
+                <Link
+                  className="nav-link"
+                  to="/mybooks"
+                  tabIndex="-1"
+                  aria-disabled="true"
+                >
+                  Mybook
+                </Link>
+              </li>
+            ) : (
+              ""
+            )}
+
             {localStorage.getItem("login") &&
             localStorage.getItem("role") === "superAdmin" ? (
               <li className="nav-item">
-                <a
+                <Link
                   className="nav-link"
-                  href="/issuedbooks"
+                  to="/issuedbooks"
                   tabIndex="-1"
                   aria-disabled="true"
                 >
                   IssuedBook
-                </a>
+                </Link>
               </li>
             ) : (
               ""
@@ -120,35 +136,25 @@ export default function NavBar() {
             {localStorage.getItem("login") &&
             localStorage.getItem("role") === "Admin" ? (
               <li className="nav-item">
-                <a
+                <Link
                   className="nav-link"
-                  href="/issuedbooks"
+                  to="/issuedbooks"
                   tabIndex="-1"
                   aria-disabled="true"
                 >
                   IssuedBook
-                </a>
+                </Link>
               </li>
             ) : (
               ""
             )}
           </ul>
-          <form class="form-inline my-2 my-lg-0">
-            <input
-              class="form-control mr-sm-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-              Search
-            </button>
-          </form>
+
           <ul className="nav navbar-nav navbar-right">
             <li className="nav-item ml-5 ">
-              <a
+              <Link
                 className="nav-link active"
-                href="/profile"
+                to="/profile"
                 tabIndex="-1"
                 aria-disabled="false"
               >
@@ -162,43 +168,43 @@ export default function NavBar() {
                   {name}
                 </span>
                 <FaUserCircle />
-              </a>
+              </Link>
             </li>
             {localStorage.getItem("login") ? (
               <li className="nav-item">
-                <a
+                <Link
                   className="nav-link"
-                  href="/logout"
+                  to="/logout"
                   tabIndex="-1"
                   aria-disabled="true"
                 >
                   Logout
-                </a>
+                </Link>
               </li>
             ) : (
               <li className="nav-item">
-                <a
+                <Link
                   className="nav-link"
-                  href="/login"
+                  to="/login"
                   tabIndex="-1"
                   aria-disabled="true"
                 >
                   Login
-                </a>
+                </Link>
               </li>
             )}
             {localStorage.getItem("login") ? (
               " "
             ) : (
               <li className="nav-item">
-                <a
+                <Link
                   className="nav-link"
-                  href="/register"
+                  to="/register"
                   tabIndex="-1"
                   aria-disabled="true"
                 >
-                  SingUp
-                </a>
+                  SignUp
+                </Link>
               </li>
             )}
           </ul>

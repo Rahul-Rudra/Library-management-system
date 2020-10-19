@@ -3,6 +3,8 @@ const db = require("../models/User");
 const { check, validationResult } = require("express-validator/check");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Issue = require("../models/Issue");
+const Book = require("../models/Book");
 //const SECRET = "secret";
 require("dotenv").config();
 
@@ -15,6 +17,41 @@ const getUser = async (req, res) => {
   }
 };
 
+const getUserId = async (req, res) => {
+  try {
+    const user = await db.findById(req.params.id);
+    const issue = await Issue.find({ "user_id.id": user._id });
+
+    res.json(issue);
+  } catch (error) {
+    res.status(500);
+  }
+};
+
+const getUserWithBookId = async (req, res) => {
+  try {
+    const book = await Book.findById(req.params.id);
+    const cid = req.params.id;
+    const user = await db.findById(req.params.user_id);
+    const pos = user.bookIssueInfo;
+    //const i = pos.indexOf("_id", book._id);
+    console.log(book._id);
+    //console.log(i);
+    //   const x = [];
+    const arr = [];
+    for (let i = 0; i < pos.length; i++) {
+      arr.push(pos[i]._id);
+    }
+    console.log(arr);
+    const i = arr.indexOf(req.params.id);
+    console.log(i);
+    // console.log(id === id1);
+
+    // console.log(book._id === user.bookIssueInfo.value._id);
+  } catch (error) {
+    res.status(404);
+  }
+};
 const getSortedUser = (req, res) => {
   res.json(res.paginatedResults);
   //res.json(result);
@@ -23,14 +60,17 @@ const getSortedUser = (req, res) => {
 const postUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(406).json({ errors: errors.array() });
   }
 
   //const {name,email,password}=req.body;
   try {
     let user = await db.findOne({ email: req.body.email });
     if (user) {
-      return res.status(400).json({ error: [{ msg: "user already exists" }] });
+      let err = "User already exists";
+      return res
+        .status(400)
+        .json({ error: [{ msg: "user already exists" }], err });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -70,6 +110,11 @@ const deleteUser = async (req, res) => {
   res.json({ message: "Successfully deleted" });
 };
 
+const getUserWithId = async (req, res) => {
+  const result = await db.findById(req.params.id);
+  res.json(result);
+  console.log(result.name);
+};
 const editUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -102,4 +147,7 @@ module.exports = {
   deleteUser,
   getSortedUser,
   editUser,
+  getUserWithId,
+  getUserId,
+  getUserWithBookId,
 };

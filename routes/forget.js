@@ -11,7 +11,7 @@ require("dotenv").config();
 const User = require("../models/User");
 const mailgun = require("mailgun-js");
 const verifyToken = require("../middleware/authenticate");
-const DOMAIN = "sandbox6fad72793e19487a832ab3c540c60c37.mailgun.org";
+const DOMAIN = "sandbox7923f71f449f422fa88d86e3d2533d5e.mailgun.org";
 const mg = mailgun({ apiKey: process.env.MAILGUN_APIKEY, domain: DOMAIN });
 
 const router = express.Router();
@@ -21,7 +21,7 @@ router.post("/", async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json("email not exists");
+      return res.status(400).send("email not exists");
     }
 
     token = jwt.sign({ _id: user._id }, process.env.RESET_KEY, {
@@ -57,9 +57,7 @@ router.post("/", async (req, res) => {
         return res.send("email not send");
       } else {
         //console.log(body);
-        return res.json({
-          msg: "email has been sent. please follow the instruction",
-        });
+        return res.send("email has been sent. please follow the instruction");
       }
     });
   } catch (error) {

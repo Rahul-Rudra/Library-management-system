@@ -2,7 +2,7 @@ const express = require("express");
 const { check, validationResult } = require("express-validator/check");
 const db = require("../models/User");
 const paginatedResults = require("../middleware/pagination");
-
+const { getUserId, getUserWithBookId } = require("../controllers/user");
 const verifyToken = require("../middleware/authenticate");
 const Admin = require("../middleware/Admin");
 const {
@@ -11,6 +11,7 @@ const {
   postUser,
   getSortedUser,
   editUser,
+  getUserWithId,
 } = require("../controllers/user");
 
 const {
@@ -21,9 +22,10 @@ const {
 } = require("../controllers/admin");
 
 const router = express.Router();
-
+router.get("/book_id/:id/user/:user_id", getUserWithBookId);
 router.get("/", getUser);
-
+router.get("/:id", getUserWithId);
+router.get("/mybooks/:id", getUserId);
 router.delete("/:id", deleteUser);
 router.post(
   "/",

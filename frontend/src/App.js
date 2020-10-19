@@ -20,7 +20,8 @@ import Activity from "./components/Activity";
 import Reset from "./components/Reset.jsx";
 import AddBook from "./components/AddBook";
 import IssuedBook from "./components/IssuedBook";
-import Example from "./components/Example";
+
+import Mybook from "./components/Mybook";
 
 //import { Toast } from "react-toastify/dist/components";
 
@@ -53,7 +54,7 @@ function App() {
         path="/issuedbooks"
         component={IssuedBook}
       ></AdminProtected>
-      <Route exact path="/examples" component={Example}></Route>
+      <Route exact path="/mybooks" component={Mybook}></Route>
     </Router>
     /*<Route exact path="/users" component={UserList}></Route>
       <Route exact path="/login" component={Login}></Route>
