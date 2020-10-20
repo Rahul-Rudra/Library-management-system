@@ -25,6 +25,7 @@ class Book extends Component {
     ],
     searchData: null,
     currentPage: 1,
+    message: [],
     pageSize: 10,
     count: 0,
     bool: "true",
@@ -75,17 +76,15 @@ class Book extends Component {
   };
 */
 
-  IssueBook = (book_id) => {
+  RequestBook = (book_id) => {
     const user_id = localStorage.getItem("id");
 
     //console.log(user_id);
     axios
-      .post(`/api/book/${book_id}/issue/${user_id}`)
+      .post(`/api/messages/book_id/${book_id}/user_id/${user_id}`)
       .then((res) => {
         //const users = this.state.user.filter((c) => c._id !== book_id);
         console.log(res.data);
-
-        this.setState({ Issue: res.data.issue });
 
         //this.setState((this.state.pos = 1));
         // this.state.bool = false;
@@ -94,14 +93,16 @@ class Book extends Component {
           ? toast.warning(
               "You can not access more than 5 books or stock is zero"
             )
-          : toast.success("successfully issued by you");
+          : toast.success("successfully requested by you");
+        this.setState({ message: res.data });
+
         return this.props.history.push("/books");
         //res.data.st === 0 ? toast("Stock is zero") : "";
       })
       .catch((error) => {
         const msg = "you can not isssue more than 5 books";
         console.log(error);
-        toast.error(msg);
+        //toast.error(msg);
       });
   };
 
@@ -236,10 +237,10 @@ class Book extends Component {
                               : "btn btn-primary float-right disabled"
                           }
                           onClick={() => {
-                            this.IssueBook(u._id);
+                            this.RequestBook(u._id);
                           }}
                         >
-                          Issue
+                          Request
                         </button>
                       </td>
 
@@ -301,10 +302,10 @@ class Book extends Component {
                               : "btn btn-primary float-right disabled"
                           }
                           onClick={() => {
-                            this.IssueBook(u._id);
+                            this.RequestBook(u._id);
                           }}
                         >
-                          Issue
+                          Request
                         </button>
                       </td>
 

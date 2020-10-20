@@ -69,6 +69,20 @@ export default class Register extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    let errors = this.state.errors;
+    if (this.state.name === "") {
+      errors.name = "Can not be null";
+    } else if (this.state.email === "") {
+      errors.email = "Can not be null";
+    } else if (this.state.password === "") {
+      errors.password = "Can not be null";
+    } else if (this.state.password.length !== 0) {
+      errors.password = this.state.errors.name;
+    } else if (this.state.errors.email.length !== 0) {
+      errors.email = this.state.errors.email;
+    } else if (this.state.errors.password.length !== 0) {
+      errors.password = this.state.errors.password;
+    }
 
     const userObject = {
       name: this.state.name,
@@ -85,7 +99,13 @@ export default class Register extends Component {
       })
       .catch((error) => {
         console.log(error);
-        alert("user already exists or enter a valid value for each field");
+        if (
+          this.state.errors.email.length === 0 &&
+          this.state.errors.password.length === 0 &&
+          this.state.errors.name.length === 0
+        ) {
+          alert("user already exists ");
+        }
       });
 
     this.setState({ name: "", email: "", password: "" });
@@ -101,12 +121,12 @@ export default class Register extends Component {
         <div className="wrapper m-5 ">
           <form onSubmit={this.onSubmit}>
             <div className="form-group m-3">
-              <label forhtml="name">UserName</label>
+              <label forhtml="name">Name</label>
               <input
                 autoFocus
                 type="text"
                 id="name"
-                placeholder="UserName"
+                placeholder="Name"
                 value={this.state.name}
                 onChange={this.onChangeUser}
                 className="form-control"
@@ -142,7 +162,7 @@ export default class Register extends Component {
                 className="form-control"
               />
               <p>
-                <span style={{ color: "Pink" }}>{errors.password}</span>
+                <span style={{ color: "pink" }}>{errors.password}</span>
               </p>
             </div>
             <div className="form-group m-3">

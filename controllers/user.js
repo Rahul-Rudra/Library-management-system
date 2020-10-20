@@ -104,7 +104,38 @@ const postUser = async (req, res) => {
     res.status(500).send("server error");
   }
 };
+/*
+const emailActivate = async (req, res) => {
+  const { token } = req.body;
+  if (token) {
+    jwt.verify(token, process.env.SECRET_KEY, function (err, decodedToken) {
+      if (err) {
+        res.status(400).json({ error: "Incorrect or expire link" });
+      }
+      const { name, email, password,role } = decodedToken;
+       let user = await db.findOne({ email: req.body.email });
+    if (user) {
+      let err = "User already exists";
+      return res
+        .status(400)
+        .json({ error: [{ msg: "user already exists" }], err });
+    }
 
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hash(password, salt);
+
+    user = new db({
+      name,
+      email,
+      password: hashed,
+      role:,
+    });
+    });
+  } else {
+    res.json({ msg: "something went wrong" });
+  }
+};
+*/
 const deleteUser = async (req, res) => {
   const result = await db.findByIdAndRemove(req.params.id);
   res.json({ message: "Successfully deleted" });

@@ -80,7 +80,7 @@ const issueBook = async (req, res) => {
       res.json({ issue: issue, user: user });
     }
   } catch (err) {
-    res.json("error");
+    res.json(err).json("error");
   }
 };
 

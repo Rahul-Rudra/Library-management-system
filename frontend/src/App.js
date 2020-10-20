@@ -22,6 +22,8 @@ import AddBook from "./components/AddBook";
 import IssuedBook from "./components/IssuedBook";
 
 import Mybook from "./components/Mybook";
+import Dashboard from "./components/Dashboard";
+import Message from "./components/Message";
 
 //import { Toast } from "react-toastify/dist/components";
 
@@ -53,6 +55,12 @@ function App() {
         exact
         path="/issuedbooks"
         component={IssuedBook}
+      ></AdminProtected>
+      <Route exact path="/dashboard" component={Dashboard}></Route>
+      <AdminProtected
+        exact
+        path="/messages"
+        component={Message}
       ></AdminProtected>
       <Route exact path="/mybooks" component={Mybook}></Route>
     </Router>

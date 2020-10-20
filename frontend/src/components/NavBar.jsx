@@ -24,11 +24,33 @@ export default function NavBar() {
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav mr-auto">
-            <li className="nav-item ">
-              <Link className="nav-link" to="/">
-                Home <span className="sr-only">(current)</span>
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                to="/"
+                tabIndex="-1"
+                aria-disabled="true"
+              >
+                Home
               </Link>
             </li>
+
+            {localStorage.getItem("login") &&
+            localStorage.getItem("role") === "superAdmin" ? (
+              <li className="nav-item">
+                <Link
+                  className="nav-link"
+                  to="/dashboard"
+                  tabIndex="-1"
+                  aria-disabled="true"
+                >
+                  Dashboard
+                </Link>
+              </li>
+            ) : (
+              ""
+            )}
+
             {localStorage.getItem("login") &&
             localStorage.getItem("role") === "superAdmin" ? (
               <li className="nav-item">

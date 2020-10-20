@@ -64,7 +64,24 @@ export default class Register extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-
+    let errors = this.state.errors;
+    if (this.state.title === "") {
+      errors.title = "Can not be null";
+    } else if (this.state.ISBN === "") {
+      errors.ISBN = "Can not be null";
+    } else if (this.state.stock === "") {
+      errors.stock = "Can not be null";
+    } else if (this.state.author === "") {
+      errors.author = "Can not be null";
+    } else if (this.state.errors.title.length !== 0) {
+      errors.title = this.state.errors.title;
+    } else if (this.state.errors.ISBN.length !== 0) {
+      errors.ISBN = this.state.errors.ISBN;
+    } else if (this.state.errors.stock.length !== 0) {
+      errors.stock = this.state.errors.stock;
+    } else if (this.state.errors.author.length !== 0) {
+      errors.author = this.state.errors.author;
+    }
     const userObject = {
       title: this.state.title,
       ISBN: this.state.ISBN,

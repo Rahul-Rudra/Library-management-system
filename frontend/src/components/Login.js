@@ -3,7 +3,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import NavBar from "./NavBar";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { json } from "body-parser";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,7 +30,10 @@ export default class Login extends Component {
   onChangeEmail(e) {
     let value = e.target.value;
     let errors = this.state.errors;
-    errors.email = value.length < 3 ? "email must contain 3 character" : "";
+    errors.email =
+      this.state.email === " " || value.length < 3
+        ? "email must contain 3 character"
+        : "";
     let apos = value.indexOf("@");
     let dotpos = value.lastIndexOf(".");
     if (apos < 1 || dotpos - apos < 2) {
@@ -49,6 +52,16 @@ export default class Login extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    let errors = this.state.errors;
+    if (this.state.email === "") {
+      errors.email = "Can not be null";
+    } else if (this.state.password === "") {
+      errors.password = "Can not be null";
+    } else if (this.state.errors.email.length !== 0) {
+      errors.email = this.state.errors.email;
+    } else if (this.state.errors.password.length !== 0) {
+      errors.password = this.state.errors.password;
+    }
 
     const userObject = {
       email: this.state.email,
@@ -70,7 +83,12 @@ export default class Login extends Component {
       })
       .catch((error) => {
         console.log(error.msg);
-        toast.error("user not exists or username and password incorrect");
+        if (
+          this.state.errors.email.length === 0 &&
+          this.state.errors.password.length === 0
+        ) {
+          toast.error("user not exists or username and password incorrect");
+        }
         // alert(error.errors);
       });
 
@@ -90,7 +108,6 @@ export default class Login extends Component {
               <input
                 autoFocus
                 autoComplete
-                required
                 type="text"
                 id="email"
                 placeholder="Email"
@@ -107,7 +124,6 @@ export default class Login extends Component {
               <input
                 autoFocus
                 autoComplete
-                required
                 type="password"
                 id="password"
                 placeholder="Password"
