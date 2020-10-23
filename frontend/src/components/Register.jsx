@@ -3,15 +3,13 @@
 import React, { Component } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
-
+import ErrorAlert from "./ErrorAlert11";
 import NavBar from "../components/NavBar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { indexOf } from "lodash";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
+//import swal from "sweetalert2";
+//import { indexOf } from "lodash";
+import { Link } from "react-router-dom";
 
 export default class Register extends Component {
   constructor(props) {
@@ -34,6 +32,7 @@ export default class Register extends Component {
         email: "",
         password: "",
       },
+      alert_message: "",
     };
   }
 
@@ -47,7 +46,8 @@ export default class Register extends Component {
   onChangeEmail(e) {
     let value = e.target.value;
     let errors = this.state.errors;
-    errors.email = value.length < 3 ? "email must contain 3 character" : "";
+    errors.email =
+      value.length > 20 ? "email can not be more than 20 character" : "";
     let apos = value.indexOf("@");
     let dotpos = value.lastIndexOf(".");
     if (apos < 1 || dotpos - apos < 2) {
@@ -94,8 +94,10 @@ export default class Register extends Component {
     axios
       .post("/api/users", userObject)
       .then((res) => {
-        toast.success("Successfully Register");
-        return this.props.history.push("/login");
+        // toast.success("Successfully Register");
+        //swal.fire("Successfully Register");
+        //return this.props.history.push("/login");
+        this.setState({ alert_message: "success" });
       })
       .catch((error) => {
         console.log(error);
@@ -104,7 +106,8 @@ export default class Register extends Component {
           this.state.errors.password.length === 0 &&
           this.state.errors.name.length === 0
         ) {
-          alert("user already exists ");
+          // alert("user already exists ");
+          this.setState({ alert_message: "error" });
         }
       });
 
@@ -115,10 +118,21 @@ export default class Register extends Component {
     const { errors } = this.state;
     return (
       <React.Fragment>
-        <NotificationContainer />
         <ToastContainer />
         <NavBar />
         <div className="wrapper m-5 ">
+          <h1 style={{ textAlign: "center", color: "ButtonShadow" }}>SignUp</h1>
+          {this.state.alert_message === "error" ? <ErrorAlert /> : ""}
+          {this.state.alert_message === "success" ? (
+            <div className="alert alert-success" role="alert">
+              Successfully Registered
+              <Link className="m-5" to="/login">
+                Login
+              </Link>
+            </div>
+          ) : (
+            ""
+          )}
           <form onSubmit={this.onSubmit}>
             <div className="form-group m-3">
               <label forhtml="name">Name</label>
@@ -131,14 +145,18 @@ export default class Register extends Component {
                 onChange={this.onChangeUser}
                 className="form-control"
               />
-              <p>
-                <span style={{ color: "Pink" }}>{errors.name}</span>
-              </p>
+              {errors.name ? (
+                <div className="alert alert-danger m-1" role="alert">
+                  {errors.name}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="form-group m-3">
               <label forhtml="email">Email</label>
               <input
-                autoFocus
+                // autoFocus
                 type="text"
                 id="email"
                 placeholder="Email"
@@ -146,14 +164,18 @@ export default class Register extends Component {
                 onChange={this.onChangeEmail}
                 className="form-control"
               />
-              <p>
-                <span style={{ color: "Pink" }}>{errors.email}</span>
-              </p>
+              {errors.email ? (
+                <div className="alert alert-danger m-1" role="alert">
+                  {errors.email}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="form-group m-3 ">
               <label forhtml="password">Password</label>
               <input
-                autoFocus
+                //autoFocus
                 type="password"
                 id="password"
                 placeholder="password"
@@ -161,9 +183,13 @@ export default class Register extends Component {
                 onChange={this.onChangePassword}
                 className="form-control"
               />
-              <p>
-                <span style={{ color: "pink" }}>{errors.password}</span>
-              </p>
+              {errors.password ? (
+                <div className="alert alert-danger m-1" role="alert">
+                  {errors.password}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="form-group m-3">
               <label forhtml="exampleFormControlSelect">Role</label>
@@ -177,13 +203,26 @@ export default class Register extends Component {
                 <option value="superAdmin">superAdmin</option>
               </select>
             </div>
-            <div className="form-group m-3">
-              <input
-                type="submit"
-                value="Register"
-                className="btn btn-success"
-              />
-            </div>
+            {this.state.errors.email.length === 0 &&
+            this.state.errors.password.length === 0 &&
+            this.state.errors.name.length === 0 ? (
+              <div className="form-group m-3">
+                <input
+                  type="submit"
+                  value="Register"
+                  className="btn btn-success "
+                />
+              </div>
+            ) : (
+              <div className="form-group m-3">
+                <input
+                  type="submit"
+                  value="Register"
+                  disabled="true"
+                  className="btn btn-success "
+                />
+              </div>
+            )}
           </form>
         </div>
       </React.Fragment>

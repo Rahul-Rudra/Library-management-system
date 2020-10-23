@@ -4,17 +4,47 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 class Dashboard extends Component {
   state = {
-    message: [],
+    message3: [],
+    message1: [],
+    message2: [],
   };
 
-  componentDidMount() {
+  getall = () => {
     axios
       .get("/api/messages")
       .then((response) => {
         //this.state.movie = response.data;
 
-        this.setState({ message: [...response.data] });
-        console.log(response.data);
+        this.setState({ message3: [...response.data] });
+        // console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  componentDidUpdate() {
+    axios
+      .get("/api/messages/allowed")
+      .then((response) => {
+        //this.state.movie = response.data;
+
+        this.setState({ message1: [...response.data] });
+        //console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  componentDidMount() {
+    this.getall();
+    axios
+      .get("/api/messages/rejected")
+      .then((response) => {
+        //this.state.movie = response.data;
+
+        this.setState({ message2: [...response.data] });
+        // console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -35,9 +65,27 @@ class Dashboard extends Component {
             </p>
             <Link to="/messages">
               <button type="button" className="btn btn-primary m-2">
-                Message
+                Pending
                 <span className="badge badge-light">
-                  {this.state.message.length}
+                  {this.state.message3.length}
+                </span>
+                <span className="sr-only">unread messages</span>
+              </button>
+            </Link>
+            <Link to="/allowedmessages">
+              <button type="button" className="btn btn-success m-2">
+                Allowed
+                <span className="badge badge-light">
+                  {this.state.message1.length}
+                </span>
+                <span className="sr-only">unread messages</span>
+              </button>
+            </Link>
+            <Link to="/rejectedmessages">
+              <button type="button" className="btn btn-secondary m-2">
+                Reject
+                <span className="badge badge-light">
+                  {this.state.message2.length}
                 </span>
                 <span className="sr-only">unread messages</span>
               </button>

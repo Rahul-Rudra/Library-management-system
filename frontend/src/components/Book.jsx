@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import book from "../book.json";
-import Issue from "../Issue.json";
+
 import searchData from "../searchData.json";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
@@ -13,7 +12,10 @@ import NavBar from "./NavBar";
 import "react-toastify/dist/ReactToastify.css";
 //import { response } from "express";
 //import user from "../../../controllers/user";
-
+import book from "../book.json";
+import _ from "lodash";
+import swal from "sweetalert2";
+import { FcDown, FcUp } from "react-icons/fc";
 class Book extends Component {
   state = {
     book: [],
@@ -30,11 +32,26 @@ class Book extends Component {
     count: 0,
     bool: "true",
     s: "btn btn-primary float-right",
-    e: "btn btn-primary float-right disabled",
+    s1: "btn btn-primary float-right",
+    e: "",
     pos: 0,
+    d: false,
+    disabled: [],
+    sortColumn: { path: "title", order: "asc" },
     //checked: false,
     // isEnable: true,
   };
+  sortBy = (path) => {
+    const sortColumn = { ...this.state.sortColumn };
+    if (sortColumn.path === path) {
+      sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
+    } else {
+      sortColumn.path = path;
+      sortColumn.order = "asc";
+    }
+    this.setState({ sortColumn });
+  };
+
   componentDidMount() {
     //this.search();
     axios
@@ -76,7 +93,8 @@ class Book extends Component {
   };
 */
 
-  RequestBook = (book_id) => {
+  RequestBook = (book_id, i) => {
+    // this.disable();
     const user_id = localStorage.getItem("id");
 
     //console.log(user_id);
@@ -96,11 +114,13 @@ class Book extends Component {
           : toast.success("successfully requested by you");
         this.setState({ message: res.data });
 
+        this.setState({ disabled: [...this.state.disabled, book_id] });
+        console.log(this.state.disabled);
+
         return this.props.history.push("/books");
         //res.data.st === 0 ? toast("Stock is zero") : "";
       })
       .catch((error) => {
-        const msg = "you can not isssue more than 5 books";
         console.log(error);
         //toast.error(msg);
       });
@@ -118,7 +138,7 @@ class Book extends Component {
         this.setState({ Issue: res.data.issue });
         //this.setState({ book: res.data.book });
         // this.state.bool = false;
-        res.data.issue === null || res.data.c != res.data.book_id
+        res.data.issue === null || res.data.c !== res.data.book_id
           ? toast.error(
               "You can not return this book first issue the book then only you can return"
             )
@@ -172,14 +192,48 @@ class Book extends Component {
       }
     });
   };*/
+  handleDelete = (id) => {
+    swal
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "red",
+        cancelButtonColor: "grey",
+        confirmButtonText: "Yes,delete it!",
+      })
+      .then((result) => {
+        if (result.value) {
+          this.deleteUser(id);
+        }
+      });
+  };
+  deleteUser = (id) => {
+    // this.opensweetalertdanger();
+    axios
+      .delete(`/api/books/${id}`)
+      .then((res) => {
+        const books = this.state.books.filter((c) => c._id !== id);
+        this.setState({ book: books });
+        swal.fire(" successfully Deleted");
+      })
+      .catch((error) => {
+        swal.fire("Something went wrong");
+      });
+  };
+
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
 
   render() {
-    const { pageSize, currentPage, book: allbook } = this.state;
-    const book = Paginate(allbook, currentPage, pageSize);
-    const { user } = this.state;
+    const { pageSize, currentPage, book: allbook, sortColumn } = this.state;
+
+    const sorted = _.orderBy(allbook, [sortColumn.path], [sortColumn.order]);
+    const book = Paginate(sorted, currentPage, pageSize);
+    //const searchData = Paginate(sorted1, currentPage, pageSize);
+    //const { user } = this.state;
     return (
       <div className="App">
         <React.Fragment>
@@ -209,7 +263,7 @@ class Book extends Component {
           {this.state.searchData ? (
             <table className="table table-bordered table-hover table-lg  p-2 m-2">
               <thead>
-                <tr>
+                <tr className="table-warning">
                   <th scope="col">Title</th>
                   <th>ISBN</th>
                   <th>Stock</th>
@@ -217,13 +271,19 @@ class Book extends Component {
                   <th scope="col">Issue</th>
                   <th>Return</th>
                   <th>Renew</th>
+                  {localStorage.getItem("role") === "superAdmin" ? (
+                    <th>Delete</th>
+                  ) : (
+                    ""
+                  )}
                 </tr>
               </thead>
               <tbody>
                 {this.state.searchData.map((u, i) => {
+                  const id = localStorage.getItem("id");
                   return (
                     <tr key={i}>
-                      <td scope="row">{u.title}</td>
+                      <td>{u.title}</td>
                       <td>{u.ISBN}</td>
                       <td>{u.stock}</td>
                       <td>{u.author}</td>
@@ -231,14 +291,20 @@ class Book extends Component {
                       <td>
                         <button
                           type="button"
-                          className={
-                            u.stock !== 0
-                              ? "btn btn-primary float-right"
-                              : "btn btn-primary float-right disabled"
+                          // disabled={this.state.d}
+                          //className={this.state.s1}
+                          disabled={
+                            this.state.disabled.indexOf(u._id) !== -1 ||
+                            u.stock === 0
                           }
                           onClick={() => {
                             this.RequestBook(u._id);
                           }}
+                          className={
+                            u.userId.includes(id)
+                              ? "btn btn-primary float-right disabled"
+                              : this.state.s
+                          }
                         >
                           Request
                         </button>
@@ -247,7 +313,12 @@ class Book extends Component {
                       <td>
                         <button
                           type="button"
-                          className={this.state.s}
+                          disabled={u.userId.includes(id) ? "false" : "true"}
+                          className={
+                            u.userId.includes(id)
+                              ? this.state.s1
+                              : "btn btn-primary float-right disabled"
+                          }
                           onClick={() => {
                             this.ReturnBook(u._id);
                           }}
@@ -258,7 +329,12 @@ class Book extends Component {
                       <td>
                         <button
                           type="button"
-                          className={this.state.s}
+                          disabled={u.userId.includes(id) ? "false" : "true"}
+                          className={
+                            u.userId.includes(id)
+                              ? this.state.s1
+                              : "btn btn-primary float-right disabled"
+                          }
                           onClick={() => {
                             this.RenewBook(u._id);
                           }}
@@ -266,40 +342,73 @@ class Book extends Component {
                           Renew
                         </button>
                       </td>
+                      {localStorage.getItem("role") === "superAdmin" ? (
+                        <td>
+                          <button
+                            type="button"
+                            className="btn btn-danger float-right"
+                            onClick={() => {
+                              this.handleDelete(u._id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      ) : (
+                        ""
+                      )}
                     </tr>
                   );
                 })}
               </tbody>
             </table>
           ) : (
-            <table className="table table-bordered table-hover table-lg  p-2 m-2">
+            <table className="table table-bordered table-hover table-lg  p-1 mt-2">
               <thead>
-                <tr>
-                  <th scope="col">Title</th>
+                <tr className="table-warning">
+                  <th scope="col" onClick={() => this.sortBy("title")}>
+                    Title{sortColumn.order === "asc" ? <FcUp /> : <FcDown />}
+                  </th>
                   <th>ISBN</th>
-                  <th>Stock</th>
-                  <th>Author</th>
+                  <th onClick={() => this.sortBy("stock")}>
+                    Stock {sortColumn.order === "asc" ? <FcUp /> : <FcDown />}
+                  </th>
+                  <th onClick={() => this.sortBy("author")}>
+                    Author{sortColumn.order === "asc" ? <FcUp /> : <FcDown />}
+                  </th>
                   <th scope="col">Issue</th>
                   <th>Return</th>
                   <th>Renew</th>
+                  {localStorage.getItem("role") === "superAdmin" ? (
+                    <th>Delete</th>
+                  ) : (
+                    ""
+                  )}
                 </tr>
               </thead>
               <tbody>
-                {this.state.book.map((u, i) => {
+                {book.map((u, i) => {
+                  //this.setState({ s: "btn btn-primary float-right" });
+                  const id = localStorage.getItem("id");
                   return (
                     <tr key={i}>
-                      <td scope="row">{u.title}</td>
+                      <td>{u.title}</td>
                       <td>{u.ISBN}</td>
                       <td>{u.stock}</td>
                       <td>{u.author}</td>
 
                       <td>
                         <button
+                          key={u._id}
                           type="button"
+                          disabled={
+                            this.state.disabled.indexOf(u._id) !== -1 ||
+                            u.stock === 0
+                          }
                           className={
-                            u.stock !== 0
-                              ? "btn btn-primary float-right"
-                              : "btn btn-primary float-right disabled"
+                            u.userId.includes(id)
+                              ? "btn btn-primary float-right disabled"
+                              : this.state.s
                           }
                           onClick={() => {
                             this.RequestBook(u._id);
@@ -312,10 +421,16 @@ class Book extends Component {
                       <td>
                         <button
                           type="button"
-                          className={this.state.s}
+                          //className={this.state.s}
+                          disabled={u.userId.includes(id) ? "false" : "true"}
                           onClick={() => {
                             this.ReturnBook(u._id);
                           }}
+                          className={
+                            u.userId.includes(id)
+                              ? this.state.s1
+                              : "btn btn-primary float-right disabled"
+                          }
                         >
                           Return
                         </button>
@@ -323,7 +438,12 @@ class Book extends Component {
                       <td>
                         <button
                           type="button"
-                          className={this.state.s}
+                          disabled={u.userId.includes(id) ? "false" : "true"}
+                          className={
+                            u.userId.includes(id)
+                              ? this.state.s1
+                              : "btn btn-primary float-right disabled"
+                          }
                           onClick={() => {
                             this.RenewBook(u._id);
                           }}
@@ -331,6 +451,21 @@ class Book extends Component {
                           Renew
                         </button>
                       </td>
+                      {localStorage.getItem("role") === "superAdmin" ? (
+                        <td>
+                          <button
+                            type="button"
+                            className="btn btn-danger float-right"
+                            onClick={() => {
+                              this.handleDelete(u._id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      ) : (
+                        ""
+                      )}
                     </tr>
                   );
                 })}

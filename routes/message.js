@@ -10,12 +10,77 @@ const Activity = require("../models/Activity");
 const db = require("../models/Message");
 
 const router = express.Router();
+
+router.get("/book/:id/:user_id", async (req, res) => {
+  try {
+    const result = await db.find({
+      $and: [
+        { "book_info.id": req.params.id },
+        { "user_id.id": req.params.user_id },
+        { allowed: "false" },
+        { rejected: "false" },
+      ],
+    });
+    // console.log(result);
+    res.json(result[0].requested);
+  } catch (error) {
+    res.status(404).json("No details");
+  }
+});
+
 router.get("/", async (req, res) => {
   try {
-    const result = await db.find();
+    const result = await db.find({
+      $and: [{ allowed: "false" }, { rejected: "false" }],
+    });
     res.json(result);
   } catch (error) {
     res.status(404).json("No details");
+  }
+});
+
+router.get("/allowed", async (req, res) => {
+  try {
+    const result = await db.find({
+      $and: [{ allowed: "true" }, { rejected: "false" }],
+    });
+    res.json(result);
+  } catch (error) {
+    res.status(404).json("No details");
+  }
+});
+router.get("/rejected", async (req, res) => {
+  try {
+    const result = await db.find({
+      $and: [{ allowed: "false" }, { rejected: "true" }],
+    });
+    res.json(result);
+  } catch (error) {
+    res.status(404).json("No details");
+  }
+});
+
+router.put("/:id", async (req, res, next) => {
+  try {
+    const message = await db.findByIdAndUpdate(req.params.id);
+
+    message.set((message.allowed = true));
+    const result = await message.save();
+    res.send(result);
+  } catch (error) {
+    res.status(404).send(error);
+  }
+});
+
+router.put("/reject/:id", async (req, res, next) => {
+  try {
+    const message = await db.findByIdAndUpdate(req.params.id);
+
+    message.set((message.rejected = true));
+    const result = await message.save();
+    res.send(result);
+  } catch (error) {
+    res.status(404).send(error);
   }
 });
 
@@ -45,9 +110,11 @@ router.post("/book_id/:book_id/user_id/:user_id", async (req, res) => {
       });
     } else {
       text = "user has requested for a book";
+      requested = "true";
       // console.log(text);
       const message = new db({
         text,
+        requested,
         book_info: {
           id: book._id,
           title: book.title,

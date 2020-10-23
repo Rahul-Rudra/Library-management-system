@@ -4,7 +4,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
 import Pagination from "./Pagination";
 import { Paginate } from "./util/Paginate";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 //import Toggle from "./Toggle";
 import NavBar from "./NavBar";
 //import Register from "./Register";
@@ -66,7 +66,7 @@ class IssuedBook extends Component {
           <NavBar />
           <table className="table table-bordered table-hover table-lg w-40 p-3 m-5">
             <thead>
-              <tr>
+              <tr className="table-success">
                 <th>Book_Title</th>
                 <th>IssueDate</th>
                 <th>UserName</th>

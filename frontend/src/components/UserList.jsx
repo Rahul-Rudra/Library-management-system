@@ -7,17 +7,40 @@ import { Paginate } from "./util/Paginate";
 import { Link } from "react-router-dom";
 //import Toggle from "./Toggle";
 import NavBar from "./NavBar";
-import Register from "./Register";
-
+//import Register from "./Register";
+import swal from "sweetalert2";
+import _ from "lodash";
+import { FcDown, FcUp } from "react-icons/fc";
 class UserList extends Component {
   state = {
     user: [],
     currentPage: 1,
     pageSize: 4,
     count: 0,
+    sortColumn: { path: "name", order: "asc" },
     //checked: false,
     // isEnable: true,
   };
+
+  handleDelete = (id) => {
+    swal
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "red",
+        cancelButtonColor: "grey",
+        confirmButtonText: "Yes,delete it!",
+      })
+      .then((result) => {
+        if (result.value) {
+          this.deleteUser(id);
+        }
+      });
+  };
+  //Button Click Function
+
   componentDidMount() {
     axios
       .get("/api/users")
@@ -32,10 +55,17 @@ class UserList extends Component {
       });
   }
   deleteUser = (id) => {
-    axios.delete(`/api/users/${id}`).then((res) => {
-      const users = this.state.user.filter((c) => c._id !== id);
-      this.setState({ user: users });
-    });
+    // this.opensweetalertdanger();
+    axios
+      .delete(`/api/users/${id}`)
+      .then((res) => {
+        const users = this.state.user.filter((c) => c._id !== id);
+        this.setState({ user: users });
+        swal.fire(" successfully Deleted");
+      })
+      .catch((error) => {
+        swal.fire("Something went wrong");
+      });
   };
 
   ///editUser = (id) => {};
@@ -56,18 +86,30 @@ class UserList extends Component {
   handlePageChange = (page) => {
     this.setState({ currentPage: page });
   };
-
+  sortBy = (path) => {
+    const sortColumn = { ...this.state.sortColumn };
+    if (sortColumn.path === path) {
+      sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
+    } else {
+      sortColumn.path = path;
+      sortColumn.order = "asc";
+    }
+    this.setState({ sortColumn });
+  };
   render() {
-    const { pageSize, currentPage, user: alluser } = this.state;
-    const user = Paginate(alluser, currentPage, pageSize);
+    const { pageSize, currentPage, user: alluser, sortColumn } = this.state;
+    const sorted = _.orderBy(alluser, [sortColumn.path], [sortColumn.order]);
+    const user = Paginate(sorted, currentPage, pageSize);
     return (
       <div className="App">
         <React.Fragment>
           <NavBar />
-          <table className="table table-bordered table-hover table-lg w-30 p-2 m-3">
+          <table className="table table-bordered table-hover table-lg w-20 p-2 m-3">
             <thead>
-              <tr>
-                <th scope="col">Name</th>
+              <tr className="table-warning">
+                <th scope="col" onClick={() => this.sortBy("name")}>
+                  Name {sortColumn.order === "asc" ? <FcUp /> : <FcDown />}
+                </th>
                 <th>Email</th>
                 <th>Role</th>
                 <th scope="col">Delete</th>
@@ -78,7 +120,7 @@ class UserList extends Component {
               {user.map((u, i) => {
                 return (
                   <tr key={i}>
-                    <td scope="row">{u.name}</td>
+                    <td>{u.name}</td>
                     <td>{u.email}</td>
                     <td>{u.role}</td>
 
@@ -87,7 +129,7 @@ class UserList extends Component {
                         type="button"
                         className="btn btn-danger float-right"
                         onClick={() => {
-                          this.deleteUser(u._id);
+                          this.handleDelete(u._id);
                         }}
                       >
                         Delete

@@ -6,8 +6,8 @@ import { Paginate } from "./util/Paginate";
 import axios from "axios";
 class Message extends Component {
   state = {
-    message: [],
     issue: [],
+    message1: [],
     pageSize: 10,
     count: 0,
     currentPage: 1,
@@ -15,11 +15,11 @@ class Message extends Component {
 
   componentDidMount() {
     axios
-      .get("/api/messages")
+      .get("/api/messages/allowed")
       .then((response) => {
         //this.state.movie = response.data;
 
-        this.setState({ message: [...response.data] });
+        this.setState({ message1: [...response.data] });
         console.log(response.data);
       })
       .catch((error) => {
@@ -27,8 +27,8 @@ class Message extends Component {
       });
   }
 
-  IssueBook = (book_id, u_id, user_id) => {
-    // const user_id = localStorage.getItem("id");
+  IssueBook = (book_id, u_id) => {
+    const user_id = localStorage.getItem("id");
 
     //console.log(user_id);
     axios
@@ -40,7 +40,7 @@ class Message extends Component {
         //this.setState((this.state.pos = 1));
         // this.state.bool = false;
         this.setState({ issue: res.data });
-        this.allowBook(u_id);
+        // this.allowBook(u_id);
         return this.props.history.push("/dashboard");
         //res.data.st === 0 ? toast("Stock is zero") : "";
       })
@@ -52,19 +52,12 @@ class Message extends Component {
   };
 
   allowBook = (id) => {
-    axios.put(`/api/messages/${id}`).then((res) => {
+    axios.put(`/api/messages/allowed/${id}`).then((res) => {
       //const message = this.state.message.filter((c) => c._id !== id);
       this.setState({ message: res.data });
     });
   };
 
-  RejectBook = (id) => {
-    axios.put(`/api/messages/reject/${id}`).then((res) => {
-      //const message = this.state.message.filter((c) => c._id !== id);
-      this.setState({ message: res.data });
-      return this.props.history.push("/dashboard");
-    });
-  };
   control = (id) => {
     this.setState({ count: this.state.count + 1 });
     // return this.state.count;
@@ -75,8 +68,8 @@ class Message extends Component {
   };
 
   render() {
-    const { pageSize, currentPage, message: allmessage } = this.state;
-    const message = Paginate(allmessage, currentPage, pageSize);
+    const { pageSize, currentPage, message1: allmessage } = this.state;
+    const message1 = Paginate(allmessage, currentPage, pageSize);
     return (
       <Fragment>
         <NavBar />
@@ -92,7 +85,7 @@ class Message extends Component {
             </tr>
           </thead>
           <tbody>
-            {message.map((u, i) => {
+            {message1.map((u, i) => {
               return (
                 <tr key={i}>
                   <td>{u.book_info.title}</td>
@@ -104,9 +97,10 @@ class Message extends Component {
                   <td>
                     <button
                       type="button"
-                      className="btn btn-primary float-right"
+                      disabled="true"
+                      className="btn btn-primary float-right disabled"
                       onClick={() => {
-                        this.IssueBook(u.book_info.id, u._id, u.user_id.id);
+                        this.IssueBook(u.book_info.id, u._id);
                       }}
                     >
                       Allow
@@ -116,12 +110,13 @@ class Message extends Component {
                   <td>
                     <button
                       type="button"
-                      className="btn btn-secondary float-right"
+                      disabled="true"
+                      className="btn btn-secondary float-right disabled"
                       onClick={() => {
-                        this.RejectBook(u._id);
+                        this.CancelBook(u._id);
                       }}
                     >
-                      Reject
+                      Cancel
                     </button>
                   </td>
                 </tr>
@@ -131,7 +126,7 @@ class Message extends Component {
         </table>
 
         <Pagination
-          itemsCount={this.state.message.length}
+          itemsCount={this.state.message1.length}
           pageSize={this.state.pageSize}
           currentPage={this.state.currentPage}
           onPageChange={this.handlePageChange}

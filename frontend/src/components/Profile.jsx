@@ -13,7 +13,7 @@ class Profile extends Component {
         <NavBar />
 
         <div className="card bg-light mb-3" style={{ width: 300 }}>
-          <img className="card-img-top " src="p.png" alt="Card image" />
+          <img className="card-img-top " src="p.png" alt="p.png" />
           <div className="card-body text">
             <h4 className="card-text">
               Name : <span style={{ color: "black" }}>{name}</span>

@@ -24,6 +24,8 @@ import IssuedBook from "./components/IssuedBook";
 import Mybook from "./components/Mybook";
 import Dashboard from "./components/Dashboard";
 import Message from "./components/Message";
+import AllowedMessage from "./components/AllowedMessage";
+import RejectedMessage from "./components/RejectedMessage";
 
 //import { Toast } from "react-toastify/dist/components";
 
@@ -61,6 +63,16 @@ function App() {
         exact
         path="/messages"
         component={Message}
+      ></AdminProtected>
+      <AdminProtected
+        exact
+        path="/allowedmessages"
+        component={AllowedMessage}
+      ></AdminProtected>
+      <AdminProtected
+        exact
+        path="/rejectedmessages"
+        component={RejectedMessage}
       ></AdminProtected>
       <Route exact path="/mybooks" component={Mybook}></Route>
     </Router>

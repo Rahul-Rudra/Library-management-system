@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import user from "../user.json";
+
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
 import Pagination from "./Pagination";
 import { Paginate } from "./util/Paginate";
-import { Link } from "react-router-dom";
+
 //import Toggle from "./Toggle";
 import NavBar from "./NavBar";
-import Register from "./Register";
 
 class Mybook extends Component {
   constructor(props) {
@@ -53,7 +52,7 @@ class Mybook extends Component {
           <NavBar />
           <table className="table table-bordered table-hover table-lg w-30 p-2 m-3">
             <thead>
-              <tr>
+              <tr className="table-success">
                 <th scope="col">Book_Name</th>
                 <th>IssueDate</th>
                 <th>Return</th>
@@ -65,7 +64,7 @@ class Mybook extends Component {
                 const d1 = u.book_info.returnDate.split("T");
                 return (
                   <tr key={i}>
-                    <td scope="row">{u.book_info.title}</td>
+                    <td>{u.book_info.title}</td>
                     <td>{d[0]}</td>
                     <td>{d1[0]}</td>
                   </tr>

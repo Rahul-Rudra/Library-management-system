@@ -4,7 +4,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.css";
 import Pagination from "./Pagination";
 import { Paginate } from "./util/Paginate";
-import { Link } from "react-router-dom";
+
 //import Toggle from "./Toggle";
 import NavBar from "./NavBar";
 //import Register from "./Register";
@@ -66,7 +66,7 @@ class Activity extends Component {
           <NavBar />
           <table className="table table-bordered table-hover table-lg w-40 p-2 m-2">
             <thead>
-              <tr>
+              <tr className="table-warning">
                 <th scope="col">Book_id</th>
                 <th>Book_Title</th>
 
@@ -79,7 +79,7 @@ class Activity extends Component {
               {activity.map((u, i) => {
                 return (
                   <tr key={i}>
-                    <td scope="row">{u.info.id}</td>
+                    <td>{u.info.id}</td>
                     <td>{u.info.title}</td>
 
                     <td>{u.user_id.name}</td>

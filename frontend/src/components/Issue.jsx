@@ -4,8 +4,6 @@ import React, { Component } from "react";
 import axios from "axios";
 import book from "../book.json";
 import user from "../user.json";
-import issue from "../Issue.json";
-import Action from "../Action.json";
 
 import "bootstrap/dist/css/bootstrap.css";
 

@@ -8,7 +8,7 @@ export default function NavBar() {
     <Fragment>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <Link className="navbar-brand" to="#">
-          Navbar
+          LMS
         </Link>
         <button
           className="navbar-toggler"
@@ -26,7 +26,7 @@ export default function NavBar() {
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">
               <Link
-                className="nav-link"
+                className="nav-link "
                 to="/"
                 tabIndex="-1"
                 aria-disabled="true"

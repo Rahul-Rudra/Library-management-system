@@ -5,6 +5,7 @@ const bookSchema = new mongoose.Schema({
   ISBN: String,
   stock: Number,
   author: String,
+  userId: [],
 });
 
 module.exports = mongoose.model("Book", bookSchema);

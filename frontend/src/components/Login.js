@@ -3,10 +3,10 @@
 import React, { Component } from "react";
 import axios from "axios";
 import NavBar from "./NavBar";
-import { Link, Redirect } from "react-router-dom";
-import { json } from "body-parser";
-import { ToastContainer, toast } from "react-toastify";
+import { Link } from "react-router-dom";
+
 import "react-toastify/dist/ReactToastify.css";
+import ErrorAlert from "./ErrorAlert";
 
 export default class Login extends Component {
   constructor(props) {
@@ -24,6 +24,7 @@ export default class Login extends Component {
         email: "",
         password: "",
       },
+      alert_message: "",
     };
   }
 
@@ -87,7 +88,10 @@ export default class Login extends Component {
           this.state.errors.email.length === 0 &&
           this.state.errors.password.length === 0
         ) {
-          toast.error("user not exists or username and password incorrect");
+          //toast.error("user not exists or username and password incorrect");
+          this.setState({
+            alert_message: "error",
+          });
         }
         // alert(error.errors);
       });
@@ -99,30 +103,37 @@ export default class Login extends Component {
     const { errors } = this.state;
     return (
       <React.Fragment>
-        <ToastContainer />
         <NavBar />
+
         <div className="wrapper m-5 ">
+          <h1 style={{ textAlign: "center", color: "ButtonShadow" }}>Login</h1>
+
+          {this.state.alert_message === "error" ? <ErrorAlert /> : ""}
           <form onSubmit={this.onSubmit}>
             <div className="form-group m-3">
               <label forhtml="email">Email</label>
               <input
                 autoFocus
                 autoComplete
-                type="text"
+                type="email"
                 id="email"
                 placeholder="Email"
                 value={this.state.email}
                 onChange={this.onChangeEmail}
                 className="form-control"
               />
-              <p>
-                <span style={{ color: "Pink" }}>{errors.email}</span>
-              </p>
+              {errors.email ? (
+                <div className="alert alert-danger m-2" role="alert">
+                  {errors.email}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="form-group m-3 ">
               <label forhtml="password">Password</label>
               <input
-                autoFocus
+                //autoFocus
                 autoComplete
                 type="password"
                 id="password"
@@ -131,13 +142,34 @@ export default class Login extends Component {
                 onChange={this.onChangePassword}
                 className="form-control"
               />
-              <p>
-                <span style={{ color: "Pink" }}>{errors.password}</span>
-              </p>
+              {errors.password ? (
+                <div className="alert alert-danger m-2" role="alert">
+                  {errors.password}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
-            <div className="form-group m-3">
-              <input type="submit" value="Login" className="btn btn-success" />
-            </div>
+            {this.state.errors.email.length === 0 &&
+            this.state.errors.password.length === 0 ? (
+              <div className="form-group m-3">
+                <input
+                  type="submit"
+                  value="Login"
+                  className="btn btn-success"
+                />
+              </div>
+            ) : (
+              <div className="form-group m-3">
+                <input
+                  type="submit"
+                  value="Login"
+                  disabled="true"
+                  className="btn btn-success"
+                />
+              </div>
+            )}
+
             <div>
               <Link to="/forget-password">Forget Password</Link>
               <hr /> New_User ?<Link to="/register">Register</Link>

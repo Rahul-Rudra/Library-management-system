@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 
 import NavBar from "../components/NavBar";
+import ErrorAlert12 from "./ErrorAlert12";
 
 export default class Register extends Component {
   constructor(props) {
@@ -28,6 +29,7 @@ export default class Register extends Component {
         stock: "",
         author: "",
       },
+      alert_message: "",
     };
   }
 
@@ -52,7 +54,7 @@ export default class Register extends Component {
     let value = e.target.value;
     let errors = this.state.errors;
     errors.stock =
-      value.length < 4 ? "stock must be a Integer and greater than 0" : "";
+      value.length < 1 ? "stock must be a Integer and greater than 0" : "";
     this.setState({ stock: e.target.value });
   }
   onChangeAuthor(event) {
@@ -93,12 +95,13 @@ export default class Register extends Component {
       .post("/api/books", userObject)
       .then((res) => {
         console.log(res.data);
-
-        return this.props.history.push("/books");
+        this.setState({ alert_message: "success" });
+        // return this.props.history.push("/books");
       })
       .catch((error) => {
         //console.log(error);
-        alert(error);
+        this.setState({ alert_message: "error" });
+        //alert(error);
       });
 
     this.setState({ title: "", ISBN: "", stock: "", author: "" });
@@ -110,6 +113,8 @@ export default class Register extends Component {
       <React.Fragment>
         <NavBar />
         <div className="wrapper m-5 ">
+          {this.state.alert_message === "success" ? <ErrorAlert12 /> : ""}
+
           <form onSubmit={this.onSubmit}>
             <div className="form-group m-3">
               <label forhtml="title">Title</label>
@@ -122,14 +127,18 @@ export default class Register extends Component {
                 onChange={this.onChangeTitle}
                 className="form-control"
               />
-              <p>
-                <span style={{ color: "Pink" }}>{errors.title}</span>
-              </p>
+              {errors.title ? (
+                <div className="alert alert-danger m-1" role="alert">
+                  {errors.title}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="form-group m-3">
               <label forhtml="ISBN">ISBN</label>
               <input
-                autoFocus
+                // autoFocus
                 type="text"
                 id="ISBN"
                 placeholder="ISBN"
@@ -137,14 +146,18 @@ export default class Register extends Component {
                 onChange={this.onChangeISBN}
                 className="form-control"
               />
-              <p>
-                <span style={{ color: "Pink" }}>{errors.ISBN}</span>
-              </p>
+              {errors.ISBN ? (
+                <div className="alert alert-danger m-1" role="alert">
+                  {errors.ISBN}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="form-group m-3 ">
               <label forhtml="stock">Stock</label>
               <input
-                autoFocus
+                // autoFocus
                 type="text"
                 id="stock"
                 placeholder="stock"
@@ -152,14 +165,18 @@ export default class Register extends Component {
                 onChange={this.onChangeStock}
                 className="form-control"
               />
-              <p>
-                <span style={{ color: "Pink" }}>{errors.stock}</span>
-              </p>
+              {errors.stock ? (
+                <div className="alert alert-danger m-1" role="alert">
+                  {errors.stock}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="form-group m-3">
               <label forhtml="author">Author</label>
               <input
-                autoFocus
+                //autoFocus
                 type="text"
                 id="author"
                 placeholder="Author"
@@ -167,9 +184,13 @@ export default class Register extends Component {
                 onChange={this.onChangeAuthor}
                 className="form-control"
               />
-              <p>
-                <span style={{ color: "Pink" }}>{errors.author}</span>
-              </p>
+              {errors.author ? (
+                <div className="alert alert-danger m-1" role="alert">
+                  {errors.author}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="form-group m-3">
               <input

@@ -128,7 +128,7 @@ const emailActivate = async (req, res) => {
       name,
       email,
       password: hashed,
-      role:,
+      role: req.body.role,
     });
     });
   } else {

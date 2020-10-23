@@ -1,9 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import {
-  NotificationContainer,
-  NotificationManager,
-} from "react-notifications";
 
 export default class Reset extends Component {
   constructor(props) {
@@ -13,7 +9,9 @@ export default class Reset extends Component {
       email: "",
       password: "",
       confirm_password: "",
-      errors: {},
+      errors: {
+        password: "",
+      },
     };
   }
   componentDidMount() {
@@ -39,8 +37,13 @@ export default class Reset extends Component {
   }
   handleInput = (e) => {
     e.preventDefault();
+    let value = e.target.value;
     const name = e.target.name;
-    const value = e.target.value;
+    let errors = this.state.errors;
+    errors.password =
+      value.length < 6 ? "password must contain atleast  6 character" : "";
+    //const name = e.target.name;
+    // const value = e.target.value;
     this.setState({ [name]: value });
   };
   handleForm = (e) => {
@@ -85,6 +88,7 @@ export default class Reset extends Component {
                       className="form-control"
                     />
                   </div>
+                  {this.state.errors.password}
                   <div className="form-group">
                     <label>Confirm Password</label>
                     <input

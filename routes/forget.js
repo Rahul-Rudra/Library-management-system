@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
     //  console.log(user.email);
     //  console.log(currentDateTime);
     const data = {
-      from: "noreply@gmail.com",
+      from: "abc@gmail.com",
       to: email,
       subject: "Foregt-Password",
       html:

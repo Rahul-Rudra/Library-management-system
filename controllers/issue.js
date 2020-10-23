@@ -4,6 +4,7 @@ const db = require("../models/Issue");
 const Book = require("../models/Book");
 const User = require("../models/User");
 const Activity = require("../models/Activity");
+const nodemailer = require("nodemailer");
 
 const getIssueBook = async (req, res) => {
   try {
@@ -52,6 +53,7 @@ const issueBook = async (req, res) => {
       });
 
       user.bookIssueInfo.push(book._id);
+      book.userId.push(user._id);
       //  const d = issue.book_info.issueDate.split("T");
       //const d1 = issue.book_info.returnDate.split("T");
       //console.log(d[0]);
@@ -77,6 +79,30 @@ const issueBook = async (req, res) => {
       await issue.save();
       await activity.save();
       await book.save();
+      /*
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: '',
+    pass: ''
+  }
+});
+
+var mailOptions = {
+  from: '',
+  to: '',
+  subject: 'confirmation mail',
+  text: ``
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+    res.json({ issue: issue, user: user });
+  }
+});*/
       res.json({ issue: issue, user: user });
     }
   } catch (err) {
@@ -96,6 +122,7 @@ const returnBook = async (req, res, next) => {
     //console.log(pos);
 
     const book = await Book.findById(book_id);
+    const pos1 = book.userId.indexOf(req.params.id);
 
     const issue = await db.findOne({ "user_id.id": req.params.id });
 
@@ -112,6 +139,7 @@ const returnBook = async (req, res, next) => {
       });
     }
     book.stock += 1;
+    book.userId.splice(pos1, 1);
     await book.save();
 
     await issue.remove();
@@ -139,6 +167,31 @@ const returnBook = async (req, res, next) => {
     await activity.save();
     res.json(issue);
     next();
+
+    /*
+var transporter = nodemailer.createTransport({
+  service: '',
+  auth: {
+    user: '',
+    pass: ''
+  }
+});
+
+var mailOptions = {
+  from: '',
+  to: '',
+  subject: '',
+  text: ``
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+    res.json(issue);
+  }
+});*/
   } catch (err) {
     res.status(400).json({ msg: "you do not issued this book" });
     //console.log(err);
