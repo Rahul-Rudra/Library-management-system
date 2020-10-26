@@ -47,7 +47,7 @@ export default class Register extends Component {
     let value = e.target.value;
     let errors = this.state.errors;
     errors.email =
-      value.length > 20 ? "email can not be more than 20 character" : "";
+      value.length > 30 ? "email can not be more than 20 character" : "";
     let apos = value.indexOf("@");
     let dotpos = value.lastIndexOf(".");
     if (apos < 1 || dotpos - apos < 2) {
