@@ -214,7 +214,7 @@ class Book extends Component {
     axios
       .delete(`/api/books/${id}`)
       .then((res) => {
-        const books = this.state.books.filter((c) => c._id !== id);
+        const books = this.state.book.filter((c) => c._id !== id);
         this.setState({ book: books });
         swal.fire(" successfully Deleted");
       })
