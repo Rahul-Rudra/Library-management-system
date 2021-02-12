@@ -32,6 +32,7 @@ export default function NavBar() {
                 aria-disabled="true"
               >
                 Home
+
               </Link>
             </li>
 
@@ -232,6 +233,7 @@ export default function NavBar() {
           </ul>
         </div>
       </nav>
+      
     </Fragment>
   );
 }

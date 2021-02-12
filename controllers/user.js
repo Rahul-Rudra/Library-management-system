@@ -1,6 +1,6 @@
 const express = require("express");
 const db = require("../models/User");
-const { check, validationResult } = require("express-validator/check");
+const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Issue = require("../models/Issue");
@@ -11,7 +11,7 @@ require("dotenv").config();
 const getUser = async (req, res) => {
   try {
     const result = await db.find();
-    res.json(result);
+    res.status(200).json(result);
   } catch (error) {
     res.status(500);
   }
@@ -89,16 +89,19 @@ const postUser = async (req, res) => {
       //res.json(user);
 
       const payload = {
-        user: {
+      
           id: user.id,
-        },
+          name:user.name,
+          email:user.email
+
+       
       };
       jwt.sign(payload, process.env.SECRET_KEY, (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ id:payload.id,name:payload.name });
       });
     } else {
-      return res.status(400).json({ msg: "In body there must be 3 key-value" });
+      return res.status(400).json({ msg: "In body there must be 4 key-value" });
     }
   } catch (error) {
     res.status(500).send("server error");

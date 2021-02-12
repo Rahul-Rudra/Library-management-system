@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { check, validationResult } = require("express-validator/check");
+const { check, validationResult } = require("express-validator");
 const Admin = require("../middleware/Admin");
 const verifyToken = require("../middleware/authenticate");
 const db = require("../models/Issue");

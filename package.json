@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "test": "jest --watchAll --verbose ",
     "build": "cd frontend && npm run build",
     "install-frontend": "cd frontend && npm install",
     "heroku-postbuild": "npm run install-frontend && npm run build",
@@ -26,8 +27,12 @@
     "lodash": "^4.17.20",
     "mailgun-js": "^0.22.0",
     "mongoose": "^5.10.5",
-    "nodemailer": "^6.4.14",
+    "nodemailer": "^6.4.13",
     "passport": "^0.4.1",
     "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "supertest": "^6.1.3"
   }
 }

@@ -27,6 +27,8 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-app.listen(port, (req, res) => {
+const server1=app.listen(port, (req, res) => {
   console.log("Running");
 });
+
+module.exports=server1;

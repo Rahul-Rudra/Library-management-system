@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { check, validationResult } = require("express-validator/check");
+const { check, validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();

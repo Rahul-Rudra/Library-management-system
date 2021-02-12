@@ -11,6 +11,8 @@ import NavBar from "./NavBar";
 import swal from "sweetalert2";
 import _ from "lodash";
 import { FcDown, FcUp } from "react-icons/fc";
+import { FaTrash} from "react-icons/fa";
+import { MdEdit} from "react-icons/md";
 class UserList extends Component {
   state = {
     user: [],
@@ -112,8 +114,8 @@ class UserList extends Component {
                 </th>
                 <th>Email</th>
                 <th>Role</th>
-                <th scope="col">Delete</th>
-                <th>Edit</th>
+                <th scope="col">Action</th>
+                
               </tr>
             </thead>
             <tbody>
@@ -125,24 +127,14 @@ class UserList extends Component {
                     <td>{u.role}</td>
 
                     <td>
-                      <button
-                        type="button"
-                        className="btn btn-danger float-right"
-                        onClick={() => {
+                    <FaTrash className="mr-3" color="red" onClick={() => {
                           this.handleDelete(u._id);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                    <td>
+                        }} />
+                     
+                  
                       <Link to={`/edit/${u._id}`}>
-                        <button
-                          type="button"
-                          className="btn btn-success float-right"
-                        >
-                          Edit
-                        </button>
+                      <MdEdit color="green"/>
+                        
                       </Link>
                     </td>
                   </tr>
