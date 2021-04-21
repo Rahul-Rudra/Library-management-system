@@ -98,13 +98,13 @@ const postUser = async (req, res) => {
       };
       jwt.sign(payload, process.env.SECRET_KEY, (err, token) => {
         if (err) throw err;
-        res.json({ id:payload.id,name:payload.name });
+        res.json(token);
       });
     } else {
       return res.status(400).json({ msg: "In body there must be 4 key-value" });
     }
   } catch (error) {
-    res.status(500).send("server error");
+    res.status(500).send(error);
   }
 };
 /*

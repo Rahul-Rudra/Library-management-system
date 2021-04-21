@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const MONGO_URL =
   process.env.MONGO_URL ||
-  "mongodb+srv://Rahul:1387Rahul@cluster0.zjhbo.mongodb.net/Notebokk?retryWrites=true&w=majority";
+  "mongodb+srv://Rahul:1387@Rahul@cluster0.zjhbo.mongodb.net/Notebokk?retryWrites=true&w=majority";
 
 const connectDB = async () => {
   if(process.env.NODE_ENV==='test')
