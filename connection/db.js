@@ -7,7 +7,7 @@ const MONGO_URL =
 const connectDB = async () => {
   if(process.env.NODE_ENV==='test')
   {
-    await mongoose.connect("mongodb+srv://Rahul:NApz2T2FcT7tjrXQ@cluster0.zjhbo.mongodb.net/Notebook_test?retryWrites=true&w=majority", {
+    await mongoose.connect("", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
